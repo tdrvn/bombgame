@@ -3,7 +3,7 @@
 // map parameteres
 const int ROWS = 101;
 const int COLUMNS = 101;
-const int NUMBER_OF_PLAYERS = 5;
+const int NUMBER_OF_PLAYERS = 10;
 
 //player parametres
 const int NUMBER_OF_TEAMS = 2; 
@@ -23,7 +23,7 @@ const int DEFAULT_SPEED = 0;
 const int SLOW_SPEED = 0;
 
 /* TODO
-const int MAP[ROWS][COLUMNS];
+const int DEFAULT_MAP[ROWS][COLUMNS];
 */
 
 struct Coordinates{
@@ -35,15 +35,22 @@ struct Coordinates{
 struct PlayerState{
 	Coordinates position;
 	int speed;
+	int respawnTime; // is alive if respawnTime = 0, in ms
 	
 	char team;
 	bool hasFlag;
 };
+struct FlagState{
+	Coordinates position;
+	
+	int isAtPlayer; 
+	int respawnTime; // is alive if respawnTime = 0, in ms
+}
 
 struct GameTable{
-	PlayerState players[NUMBER_OF_TEAMS][NUMBER_OF_PLAYERS];
-	
-	
+	PlayerState players[NUMBER_OF_PLAYERS];
+	FlagState flags[NUMBER_OF_TEAMS];
+	int gameState;
 };
 
 
