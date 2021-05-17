@@ -5,6 +5,6 @@ src:
 pipes:
 	mkdir pipes
 openfiles: 
-	geany server.cpp & geany game.cpp & geany protocol.cpp & geany viewer.cpp & geany game.h & geany protocol.h & geany viewer.h
+	geany src/server.cpp & geany src/game.cpp & geany src/protocol.cpp & geany src/viewer.cpp & geany src/headers/game.h & geany src/headers/protocol.h & geany src/headers/viewer.h
 	
 
