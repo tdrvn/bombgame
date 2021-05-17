@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdio.h>
-#include "headers/game.h"
+#include "game.h"
 
 // sent by server, received by players
 struct ServerMessage {
@@ -11,7 +11,12 @@ struct ServerMessage {
 
 // sent by players, received by server
 struct PlayerMessage {
-	int move;
+	int actions[3];
+	PlayerMessage(int first = 0, int second = 0, int third = 0){
+			actions[0] = first;
+			actions[1] = second;
+			actions[2] = third;
+	}
 };
 
 void sendMove(FILE *pipe, PlayerMessage m);

@@ -1,4 +1,3 @@
-#pragma once
 #include "headers/viewer.h"
 #include <algorithm>
 #include <math.h>
