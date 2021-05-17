@@ -2,6 +2,9 @@ bin:
 	mkdir bin
 src:
 	mkdir src
-head:
-	mkdir head
+head: | src
+	mkdir src/head
+pipes:
+	mkdir pipes
+	
 
