@@ -68,5 +68,5 @@ struct GameTable{
 	int gameState;
 };
 
-void makeMovesTick(GameTable &table, PlayerMessage &msg[NUMBER_OF_PLAYERS]);
-GameTable initGameTable();
+void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS]);
+void initGameTable(GameTable &table);
