@@ -23,6 +23,7 @@ void getDefaultMap(){
 		}
 		
 	}
+
 }
 
 void initGameTable(GameTable &table){
