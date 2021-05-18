@@ -19,7 +19,6 @@ void getDefaultMap(){
 		}
 		
 	}
-
 }
 /*
 Coordinates GetNewCoordinates(Coordinates oldPos, int moveType, bool &willExplode){
