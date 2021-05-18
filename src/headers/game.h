@@ -20,7 +20,7 @@ const int TEAMS[2] = {RED_TEAM, BLUE_TEAM};
 // not const since it might change over the course of the game
 int DEFAULT_RESPAWN_TIME = 20; // TBD
 
-const int EXPLOSION_RADIUS = 6 // TBD
+const int EXPLOSION_RADIUS = 6; // TBD
 
 //game states
 const int ERROR = 0;
@@ -55,6 +55,10 @@ struct Coordinates{
 	int row, col;
 	Coordinates() : row(0), col(0){}
 	Coordinates(int _row, int _col) : row(_row), col(_col){}
+	
+	bool operator == (Coordinates other) const{
+		return row == other.row && col == other.col;
+	}
 };
 
 //spawn positions
