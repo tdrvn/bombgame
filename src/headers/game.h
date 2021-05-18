@@ -1,5 +1,5 @@
 #pragma once
-
+#include <cassert>
 
 // map parameteres
 const int ROWS = 100;
@@ -14,6 +14,13 @@ const int NUMBER_OF_PLAYERS = 10;
 const int NUMBER_OF_TEAMS = 2; 
 const char RED_TEAM = 0;
 const char BLUE_TEAM = 1;
+
+const int TEAMS[2] = {RED_TEAM, BLUE_TEAM};
+
+// not const since it might change over the course of the game
+int DEFAULT_RESPAWN_TIME = 20; // TBD
+
+const int EXPLOSION_RADIUS = 6 // TBD
 
 //game states
 const int ERROR = 0;
@@ -51,12 +58,21 @@ struct Coordinates{
 };
 
 //spawn positions
-const Coordinates spawns[NUMBER_OF_TEAMS] = {(Coordinates){0, 0},
-											 (Coordinates){ROWS, COLUMNS}};
+const Coordinates spawns[NUMBER_OF_TEAMS] = {(Coordinates){14, 68},
+											 (Coordinates){84, 31}};
+
+//flag home positions
+const Coordinates flag_home[NUMBER_OF_TEAMS] = {(Coordinates){12, 87},
+											    (Coordinates){87, 12}};
+
+//flag constants
+const int AT_HOME = -1;
+const int ON_GROUND = -2;
+
 struct PlayerState{
 	Coordinates position;
 	int speed;
-	int respawnTime; // is alive if respawnTime = 0, in ms
+	int respawnTime; // is alive if respawnTime = 0, in ticks
 	
 	char team;
 	bool hasFlag;
@@ -64,7 +80,7 @@ struct PlayerState{
 struct FlagState{
 	Coordinates position;
 	
-	int isAtPlayer; 
+	int isAtPlayer;
 };
 
 struct GameTable{
