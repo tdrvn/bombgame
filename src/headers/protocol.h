@@ -6,7 +6,7 @@
 // sent by server, received by players
 struct ServerMessage {
 	GameTable table;
-	int currentplayer;
+	int currentPlayer;
 };
 
 // sent by players, received by server
