@@ -5,7 +5,7 @@
 #include "headers/game.h"
 #include "headers/protocol.h"
 #include "headers/viewer.h"
-#include <cassert>
+
 typedef std::chrono::high_resolution_clock Clock;
 auto lastRenderTime = Clock::now();
 
@@ -36,7 +36,7 @@ void nextTick() {
 			else
 				playerMessages[currentPlayer] = currentMessage;
 		}
-      makeMovesTick(&table, playerMessages);
+      makeMovesTick(table, playerMessages);
       gameState=table.gameState;
       assert(gameState!=ERROR);
     } else {
