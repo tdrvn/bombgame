@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdio.h>
 #include "game.h"
+#include <stdio.h>
 
 // sent by server, received by players
 struct ServerMessage {

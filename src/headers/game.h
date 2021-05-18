@@ -1,4 +1,6 @@
 #pragma once
+#include "protocol.h"
+
 
 // map parameteres
 const int ROWS = 100;
@@ -34,9 +36,11 @@ const int DEFAULT_SPEED = 3;
 const int SLOW_SPEED = 2;
 
 
-/* TODO
-const int DEFAULT_MAP[ROWS][COLUMNS];
+/* TODO: make it constant
 */
+const int DEFAULT_MAP[ROWS][COLUMNS]={0};
+const int CELL_FREE = 0;
+const int CELL_OCCUPIED = 1;
 
 struct Coordinates{
 /* keeps coordinates of a point
@@ -46,8 +50,8 @@ struct Coordinates{
 };
 
 //spawn positions
-const Coordinates spawns[NUMBER_OF_TEAMS] = {(Coordinates)(0, 0)
-											 (Coordinates)(ROWS, COLUMNS)};
+const Coordinates spawns[NUMBER_OF_TEAMS] = {(Coordinates){0, 0},
+											 (Coordinates){ROWS, COLUMNS}};
 struct PlayerState{
 	Coordinates position;
 	int speed;
@@ -70,3 +74,4 @@ struct GameTable{
 
 void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS]);
 void initGameTable(GameTable &table);
+void getDefaultMap();
