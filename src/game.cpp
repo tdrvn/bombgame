@@ -3,8 +3,6 @@
 void getDefaultMap(){
 	char readMap[ROWS][COLUMNS];
 	
-	int *defaultMap[ROWS] = DEFAULT_MAP;
-	
 	FILE *mapLocation;
 	mapLocation = fopen("../files/_default_map", "r");
 	for(int row = 0; row < ROWS; row++){
@@ -15,9 +13,9 @@ void getDefaultMap(){
 	for(int row = 0; row < ROWS; row++){
 		for(int cols = 0; cols < COLUMNS; cols++){
 			if(readMap[row][cols] == '0')
-				defaultMap[row][cols] = CELL_FREE;
+				DEFAULT_MAP[row][cols] = CELL_FREE;
 			else
-				defaultMap[row][cols] = CELL_OCCUPIED;
+				DEFAULT_MAP[row][cols] = CELL_OCCUPIED;
 		}
 		
 	}

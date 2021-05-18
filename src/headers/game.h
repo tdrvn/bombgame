@@ -38,14 +38,16 @@ const int SLOW_SPEED = 2;
 
 /* TODO: make it constant
 */
-const int DEFAULT_MAP[ROWS][COLUMNS]={0};
+int DEFAULT_MAP[ROWS][COLUMNS];
 const int CELL_FREE = 0;
 const int CELL_OCCUPIED = 1;
 
-struct Coordinates{
+
 /* keeps coordinates of a point
  */
+struct Coordinates{
 	int row, col;
+	Coordinates() : row(0), col(0){}
 	Coordinates(int _row, int _col) : row(_row), col(_col){}
 };
 
