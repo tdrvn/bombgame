@@ -1,5 +1,4 @@
 #pragma once
-#include "protocol.h"
 
 
 // map parameteres
@@ -73,6 +72,18 @@ struct GameTable{
 	FlagState flags[NUMBER_OF_TEAMS];
 	int gameState;
 };
+
+
+// actions to be made by player
+struct PlayerMessage {
+	int actions[3];
+	PlayerMessage(int first = 0, int second = 0, int third = 0){
+			actions[0] = first;
+			actions[1] = second;
+			actions[2] = third;
+	}
+};
+
 
 void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS]);
 void initGameTable(GameTable &table);

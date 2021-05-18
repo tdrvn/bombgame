@@ -9,15 +9,6 @@ struct ServerMessage {
 	int currentPlayer;
 };
 
-// sent by players, received by server
-struct PlayerMessage {
-	int actions[3];
-	PlayerMessage(int first = 0, int second = 0, int third = 0){
-			actions[0] = first;
-			actions[1] = second;
-			actions[2] = third;
-	}
-};
 
 void sendMove(FILE *pipe, PlayerMessage m);
 
