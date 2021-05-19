@@ -62,8 +62,8 @@ int main(int argc, char** argv) {
     
 	for (int i = 0; i < NUMBER_OF_PLAYERS; ++i)
 	{
-		pipeFiles[i][0] = argv[2 * i + 1];
-		pipeFiles[i][1] = argv[2 * i + 2];
+		pipeFiles[i][1] = argv[2 * i + 1]; // first input read file, then write file
+		pipeFiles[i][0] = argv[2 * i + 2];
 	}
 
 	for (int i = 0; i < NUMBER_OF_PLAYERS; ++i)

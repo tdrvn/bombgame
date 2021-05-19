@@ -6,8 +6,8 @@
 
 int main(int argc, char** argv) {
   char* pipeFiles[2];
-  pipeFiles[0] = argv[1];
-  pipeFiles[1] = argv[2];
+  pipeFiles[1] = argv[1]; // first where the player writes, 2nd where the player reads
+  pipeFiles[0] = argv[2];
   FILE *pipes[2];
   pipes[0] = fopen(pipeFiles[0], "rb");
   pipes[1] = fopen(pipeFiles[1], "wb");
