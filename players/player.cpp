@@ -1,8 +1,8 @@
 #include <initializer_list>
 #include <stdio.h>
 #include <stdlib.h>
-#include "game.h"
-#include "protocol.h"
+#include "../src/headers/game.h"
+#include "../src/headers/protocol.h"
 
 int main(int argc, char** argv) {
   char* pipeFiles[2];
