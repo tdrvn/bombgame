@@ -37,7 +37,7 @@ int sendGameState(FILE *pipe, ServerMessage m) {
 
 void receiveGameState(FILE *pipe, ServerMessage *m) {
   if (fread(m, sizeof(ServerMessage), 1, pipe) != 1) {
-    fprintf(stderr, "Server failure - receiveGameState!!!\n");
-    exit(0);
+    //fprintf(stderr, "Server failure - receiveGameState!!!\n");
+    //exit(0);
   }
 }

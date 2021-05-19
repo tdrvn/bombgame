@@ -7,12 +7,16 @@ const int dc[5] = {0, 0, -1, 0, 1};
 int dist[ROWS][COLUMNS];
 
 void getDefaultMap(){
+	
 	char readMap[ROWS][COLUMNS];
 	
 	FILE *mapLocation;
-	mapLocation = fopen("../files/_default_map", "r");
+	mapLocation = fopen("./files/_default_map", "r");
+	if(mapLocation == NULL)
+		printf("ERROR READING MAP\n");
 	for(int row = 0; row < ROWS; row++){
-		fgets(readMap[row], ROWS + 1, mapLocation);
+		if(fgets(readMap[row], COLUMNS + 1, mapLocation) == NULL )
+			printf("ERROR READING COLUMN OF MAP\n");
 	}
 	fclose(mapLocation);
 	
@@ -29,6 +33,7 @@ void getDefaultMap(){
 }
 
 void initGameTable(GameTable &table){
+	getDefaultMap();
 	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 		table.players[i].hasFlag = false;
 		if(i < 5)

@@ -67,7 +67,7 @@ void onWindowResize(int w, int h) {
 }
 void actualLoop (int a)
 {
-	glutTimerFunc(100, actualLoop, -1);
+	glutTimerFunc(1000, actualLoop, -1);
 	nextTick();
 	glutPostRedisplay();
 }
@@ -80,7 +80,7 @@ int mainLoop(int argc, char **argv) {
 	glutDisplayFunc(display);
 	//glutIdleFunc(nextMove);
 	//glutMouseFunc(onMouseClick);
-	glutTimerFunc(100, actualLoop, -1);
+	glutTimerFunc(1000, actualLoop, -1);
 	glutMainLoop();
 	return 0;
 }
