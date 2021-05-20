@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
   FILE *pipes[2];
   pipes[0] = fopen(pipeFiles[0], "rb");
   pipes[1] = fopen(pipeFiles[1], "wb");
-
+  srand(argv[1][20]);
   ServerMessage serverMessage;
   
   PlayerMessage myMessage;
@@ -20,15 +20,23 @@ int main(int argc, char** argv) {
   
   int IAm = serverMessage.currentPlayer;
   while (serverMessage.table.gameState == PLAYING) {
+	
+	
+	int s=0,j;
+	for(int i=1;i<=2000000;++i)
+	{
+		j=(i+1000)%(i+1);
+		s+=j;
+	}
 	for(int i = 0; i < serverMessage.table.players[IAm].speed; ++i)
 	{
-		if(rand()%20==0)
+		if((rand()^rand())%500==0)
 			myMessage.actions[i] = MOVE_BOOM;
 		else
-			myMessage.actions[i] = rand() % 5;
+			myMessage.actions[i] = (rand()^rand()) % 5;
 	}
-    sendMove(pipes[1], myMessage);
-    receiveGameState(pipes[0], &serverMessage);
+	sendMove(pipes[1], myMessage);
+	receiveGameState(pipes[0], &serverMessage);
   }
   
   for (int i : {0, 1}) {

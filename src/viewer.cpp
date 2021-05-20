@@ -23,8 +23,29 @@ void drawRegPoly(float x, float y, float r, int edges) {
 	glEnd();
 }
 
+void drawSquare (float x, float y, float side)
+{
+	glBegin(GL_POLYGON);
+	glVertex2f(x, y);
+    glVertex2f(x + side, y);
+    glVertex2f(x + side, y - side);
+    glVertex2f(x, y - side);
+    glEnd();
+}
+
+void drawEmptySquare (float x, float y, float halfSide)
+{
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(x + halfSide, y + halfSide);
+    glVertex2f(x + halfSide, y - halfSide);
+    glVertex2f(x - halfSide, y - halfSide);
+    glVertex2f(x - halfSide, y + halfSide);
+    glEnd();
+}
+
+
 void drawLine(float x1, float y1, float x2, float y2) {
-	glLineWidth(1.0f);
+	glLineWidth(4.0f);
 	glBegin(GL_LINES);
 		glVertex2f(x1, y1);
     glVertex2f(x2, y2);
@@ -36,9 +57,10 @@ void drawArena (int gameState, GameTable *table)
 	glLoadIdentity();
 	glColor3f(0.8f, 0.8f, 0.8f);
 	glRasterPos2f(-2.0f, 2.0f);
+	
 	writeText("\n");
 	if (gameState == PLAYING) {
-		writeText("Still playing!n");
+		writeText("Still playing!\n");
 	} else if (gameState == BLUE_WINS) {
 		writeText("Game outcome: BLUE wins!\n");
 	} else if (gameState == RED_WINS) {
@@ -48,6 +70,47 @@ void drawArena (int gameState, GameTable *table)
 	}
 	// TODO:
 	// drawing the board and stuff
+	printf("printing sth\n");
+	//drawEmptySquare(0.0f, 0.0f, 1.5f);
+	for(int i = 0; i < ROWS; ++i)
+		for(int j = 0; j < COLUMNS; ++j)
+		{
+			if(DEFAULT_MAP[i][j] == CELL_FREE)
+			{
+				float x = 0 - 1.5f + (float)j*0.03f;
+				float y = 0 + 1.5f - (float)i*0.03f;
+				drawSquare(x, y, 0.03f);
+			}
+		}
+	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i)
+	{
+		if(table->players[i].respawnTime > 0)
+			continue;
+		if(table->players[i].team == RED_TEAM)
+			glColor3f(0.9f, 0.0f, 0.0f);
+		else
+			glColor3f(0.0f, 0.0f, 0.9f);
+		int ii=table->players[i].position.row;
+		int jj=table->players[i].position.col;
+		float x = 0 - 1.5f + (float)jj*0.03f;
+		float y = 0 + 1.5f - (float)ii*0.03f;
+		drawRegPoly(x, y, 0.03f, 20);
+	}
+	glColor3f(0.9f, 0.0f, 0.0f);
+	int ii=table->flags[0].position.row;
+	int jj=table->flags[0].position.col;
+	float x = 0 - 1.5f + (float)jj*0.03f;
+	float y = 0 + 1.5f - (float)ii*0.03f;
+	drawRegPoly(x, y, 0.03f, 3);
+	
+	glColor3f(0.0f, 0.0f, 0.9f);
+	ii=table->flags[1].position.row;
+	jj=table->flags[1].position.col;
+	x = 0 - 1.5f + (float)jj*0.03f;
+	y = 0 + 1.5f - (float)ii*0.03f;
+	drawRegPoly(x, y, 0.03f, 3);
+    glFlush();
+	glutSwapBuffers();
 }
 void onWindowResize(int w, int h) {
   //printf("onWindowResize %d %d\n", w, h);
@@ -67,7 +130,7 @@ void onWindowResize(int w, int h) {
 }
 void actualLoop (int a)
 {
-	glutTimerFunc(1000, actualLoop, -1);
+	glutTimerFunc(50, actualLoop, -1);
 	nextTick();
 	glutPostRedisplay();
 }
@@ -80,7 +143,7 @@ int mainLoop(int argc, char **argv) {
 	glutDisplayFunc(display);
 	//glutIdleFunc(nextMove);
 	//glutMouseFunc(onMouseClick);
-	glutTimerFunc(1000, actualLoop, -1);
+	glutTimerFunc(50, actualLoop, -1);
 	glutMainLoop();
 	return 0;
 }

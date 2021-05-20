@@ -18,7 +18,7 @@ const char BLUE_TEAM = 1;
 const int TEAMS[2] = {RED_TEAM, BLUE_TEAM};
 
 // not const since it might change over the course of the game
-static int DEFAULT_RESPAWN_TIME = 20; // TBD
+extern int DEFAULT_RESPAWN_TIME; // TBD
 
 const int EXPLOSION_RADIUS = 6; // TBD
 
@@ -44,7 +44,7 @@ const int SLOW_SPEED = 2;
 
 /* TODO: make it constant
 */
-static int DEFAULT_MAP[ROWS][COLUMNS];
+extern int DEFAULT_MAP[ROWS][COLUMNS];
 const int CELL_FREE = 0;
 const int CELL_OCCUPIED = 1;
 

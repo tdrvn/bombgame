@@ -53,7 +53,6 @@ void nextTick() {
 			}
 		}
     }
-  display();
   return;
 }
 

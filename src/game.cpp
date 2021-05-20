@@ -5,7 +5,8 @@
 const int dr[5] = {0, -1, 0, 1, 0};
 const int dc[5] = {0, 0, -1, 0, 1};
 int dist[ROWS][COLUMNS];
-
+int DEFAULT_MAP[ROWS][COLUMNS];
+int DEFAULT_RESPAWN_TIME = 10;
 void getDefaultMap(){
 	
 	char readMap[ROWS][COLUMNS];
@@ -15,7 +16,7 @@ void getDefaultMap(){
 	if(mapLocation == NULL)
 		printf("ERROR READING MAP\n");
 	for(int row = 0; row < ROWS; row++){
-		if(fgets(readMap[row], COLUMNS + 1, mapLocation) == NULL )
+		if(fgets(readMap[row], COLUMNS + 2, mapLocation) == NULL )
 			printf("ERROR READING COLUMN OF MAP\n");
 	}
 	fclose(mapLocation);
@@ -25,7 +26,9 @@ void getDefaultMap(){
 			if(readMap[row][col] == '0')
 				DEFAULT_MAP[row][col] = CELL_FREE;
 			else
+			{
 				DEFAULT_MAP[row][col] = CELL_OCCUPIED;
+			}
 		}
 		
 	}
