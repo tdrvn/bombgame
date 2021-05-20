@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <queue>
 #include <vector>
+#include <stdlib.h>
+
 const int dr[5] = {0, -1, 0, 1, 0};
 const int dc[5] = {0, 0, -1, 0, 1};
 int dist[ROWS][COLUMNS];
@@ -45,7 +47,7 @@ void initGameTable(GameTable &table){
 			table.players[i].team = BLUE_TEAM;
 		table.players[i].respawnTime = 0;
 		table.players[i].speed = DEFAULT_SPEED;
-		table.players[i].position = spawns[table.players[i].team];
+		table.players[i].position = spawns[table.players[i].team][rand() % NUMBER_OF_SPAWNS];
 	}
 	for(int i = 0; i < NUMBER_OF_TEAMS; ++i){
 		table.flags[i].isAtPlayer = AT_HOME;
@@ -111,7 +113,7 @@ void killPlayer (GameTable &table, int player){
 
 // TODO: random spawn positions
 void respawnPlayer (GameTable &table, int player){
-	table.players[player].position = spawns[table.players[player].team];
+	table.players[player].position = spawns[table.players[player].team][rand() % NUMBER_OF_SPAWNS];
 	
 	assert(table.players[player].hasFlag == false);
 	assert(table.players[player].speed == DEFAULT_SPEED);
