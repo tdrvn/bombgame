@@ -94,6 +94,8 @@ void drawArena (int gameState, GameTable *table)
 		int jj=table->players[i].position.col;
 		float x = 0 - 1.5f + (float)jj*0.03f;
 		float y = 0 + 1.5f - (float)ii*0.03f;
+		x+=0.015;
+		y-=0.015;
 		drawRegPoly(x, y, 0.03f, 20);
 	}
 	glColor3f(0.9f, 0.0f, 0.0f);
@@ -101,6 +103,8 @@ void drawArena (int gameState, GameTable *table)
 	int jj=table->flags[0].position.col;
 	float x = 0 - 1.5f + (float)jj*0.03f;
 	float y = 0 + 1.5f - (float)ii*0.03f;
+	x+=0.015;
+	y-=0.015;
 	drawRegPoly(x, y, 0.03f, 3);
 	
 	glColor3f(0.0f, 0.0f, 0.9f);
@@ -108,6 +112,8 @@ void drawArena (int gameState, GameTable *table)
 	jj=table->flags[1].position.col;
 	x = 0 - 1.5f + (float)jj*0.03f;
 	y = 0 + 1.5f - (float)ii*0.03f;
+	x+=0.015;
+	y-=0.015;
 	drawRegPoly(x, y, 0.03f, 3);
     glFlush();
 	glutSwapBuffers();
