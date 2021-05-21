@@ -108,6 +108,7 @@ void killPlayer (GameTable &table, int player){
 	}
 	table.players[player].respawnTime = DEFAULT_RESPAWN_TIME;
 	table.players[player].speed = DEFAULT_SPEED;
+	alive[player] = false;
 	
 	//maybe yes maybe no
 	srand(time(0));
