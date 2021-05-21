@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 	
 	
 	int s=0,j;
-	for(int i=1;i<=2000000;++i)
+	for(int i=1;i<=1000000;++i)
 	{
 		j=(i+1000)%(i+1);
 		s+=j;

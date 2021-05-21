@@ -45,6 +45,7 @@ const int SLOW_SPEED = 2;
 /* TODO: make it constant
 */
 extern int DEFAULT_MAP[ROWS][COLUMNS];
+extern int dist[ROWS][COLUMNS];
 const int CELL_FREE = 0;
 const int CELL_OCCUPIED = 1;
 
@@ -107,6 +108,6 @@ struct PlayerMessage {
 };
 
 
-void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS]);
+void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int whatAction);
 void initGameTable(GameTable &table);
 void getDefaultMap();

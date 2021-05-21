@@ -7,4 +7,4 @@ int mainLoop(int argc, char **argv);
 
 void display();
 
-void nextTick();
+void nextTick(int whatAction);

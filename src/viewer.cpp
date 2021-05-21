@@ -7,7 +7,7 @@
 
 int windowWidth;
 int windowHeight;
-
+int stillExploding[ROWS][COLUMNS];
 const float PI = 4 * atan(1);
 
 void writeText(const char* string) {
@@ -75,10 +75,27 @@ void drawArena (int gameState, GameTable *table)
 	for(int i = 0; i < ROWS; ++i)
 		for(int j = 0; j < COLUMNS; ++j)
 		{
-			if(DEFAULT_MAP[i][j] == CELL_FREE)
+			if(DEFAULT_MAP[i][j] == CELL_FREE && dist[i][j] == 0 && stillExploding[i][j] == 0)
 			{
+				glColor3f(0.8f, 0.8f, 0.8f);
 				float x = 0 - 1.5f + (float)j*0.03f;
 				float y = 0 + 1.5f - (float)i*0.03f;
+				drawSquare(x, y, 0.03f);
+			}
+			else if(DEFAULT_MAP[i][j] == CELL_FREE && dist[i][j] == 0)
+			{
+				glColor3f(0.96f, 0.6f, 0.23f);
+				float x = 0 - 1.5f + (float)j*0.03f;
+				float y = 0 + 1.5f - (float)i*0.03f;
+				stillExploding[i][j] = 0;
+				drawSquare(x, y, 0.03f);
+			}
+			else if(DEFAULT_MAP[i][j] == CELL_FREE)
+			{
+				glColor3f(0.96f, 0.6f, 0.23f);
+				float x = 0 - 1.5f + (float)j*0.03f;
+				float y = 0 + 1.5f - (float)i*0.03f;
+				stillExploding[i][j] = 1;
 				drawSquare(x, y, 0.03f);
 			}
 		}
@@ -134,11 +151,14 @@ void onWindowResize(int w, int h) {
       2.0 * (GLfloat) w / (GLfloat) h, -2.0, 2.0, -10.0, 10.0);
   glMatrixMode(GL_MODELVIEW);
 }
+int whatAction = 0;
 void actualLoop (int a)
 {
-	glutTimerFunc(50, actualLoop, -1);
-	nextTick();
+	glutTimerFunc(100, actualLoop, -1);
+	nextTick(whatAction);
 	glutPostRedisplay();
+	whatAction++;
+	whatAction%=3;
 }
 int mainLoop(int argc, char **argv) {
 	glutInit(&argc, argv);
@@ -149,7 +169,7 @@ int mainLoop(int argc, char **argv) {
 	glutDisplayFunc(display);
 	//glutIdleFunc(nextMove);
 	//glutMouseFunc(onMouseClick);
-	glutTimerFunc(50, actualLoop, -1);
+	glutTimerFunc(100, actualLoop, -1);
 	glutMainLoop();
 	return 0;
 }

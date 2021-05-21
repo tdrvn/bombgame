@@ -18,27 +18,28 @@ bool communicationEnded;
 void display() {
   drawArena(gameState, &table);
 }
-
-void nextTick() {
+PlayerMessage playerMessages[NUMBER_OF_PLAYERS];
+void nextTick(int whatAction) {
 	//auto currentTime = Clock::now();
 	//int duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastRenderTime).count();
 
 	if (gameState == PLAYING) {
-		printf("nextTick\n");
-		PlayerMessage playerMessages[NUMBER_OF_PLAYERS];
-		PlayerMessage currentMessage;
-		for(int currentPlayer = 0; currentPlayer < NUMBER_OF_PLAYERS; ++currentPlayer)
-		{
-			int errorCode = sendGameState(pipes[currentPlayer][0], ServerMessage{table, currentPlayer})
-						 || receiveMove(pipes[currentPlayer][1], &currentMessage);
-			if(errorCode)
-				playerMessages[currentPlayer] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
-			else
-				playerMessages[currentPlayer] = currentMessage;
+		if(whatAction == 0){
+			printf("nextTick\n");
+			PlayerMessage currentMessage;
+			for(int currentPlayer = 0; currentPlayer < NUMBER_OF_PLAYERS; ++currentPlayer)
+			{
+				int errorCode = sendGameState(pipes[currentPlayer][0], ServerMessage{table, currentPlayer})
+							|| receiveMove(pipes[currentPlayer][1], &currentMessage);
+				if(errorCode)
+					playerMessages[currentPlayer] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
+				else
+					playerMessages[currentPlayer] = currentMessage;
+			}
 		}
-      makeMovesTick(table, playerMessages);
-      gameState=table.gameState;
-      assert(gameState!=ERROR);
+		makeMovesTick(table, playerMessages, whatAction);
+		gameState=table.gameState;
+		assert(gameState!=ERROR);
     } else {
 		if (!communicationEnded) {
 			communicationEnded = true;

@@ -111,7 +111,6 @@ void killPlayer (GameTable &table, int player){
 }
 
 
-// TODO: random spawn positions
 void respawnPlayer (GameTable &table, int player){
 	table.players[player].position = spawns[table.players[player].team][rand() % NUMBER_OF_SPAWNS];
 	
@@ -119,12 +118,18 @@ void respawnPlayer (GameTable &table, int player){
 	assert(table.players[player].speed == DEFAULT_SPEED);
 	
 	interactWithFlag(table, player);
-	// IMPORTANT !! IF RESPAWNING ON A FLAG, DO WHAT IS NECESSARY !!
+}
+
+std::vector <Coordinates> allPos;
+void resetBoom ()
+{
+	for(Coordinates coord : allPos)
+		dist[coord.row][coord.col] = 0;
+	allPos.clear();
 }
 
 void makeBoom(GameTable &table, int player){
 	std::queue <Coordinates> q;
-	std::vector <Coordinates> allPos; 
 	
 	q.push(table.players[player].position);
 	allPos.push_back(table.players[player].position);
@@ -152,9 +157,6 @@ void makeBoom(GameTable &table, int player){
 		}
 	}
 	
-	for(Coordinates coord : allPos)
-		dist[coord.row][coord.col] = 0;
-	//PTODO: probably send allPos to viewer
 }
 
 
@@ -204,21 +206,21 @@ void makeMove (GameTable &table, int player, int moveType){
 }
 
 
-void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS]){
+void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int whatAction){
 	
 	// Determine what players are alive
+	if(whatAction == 0)
 	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 		if(table.players[i].respawnTime != 0){
 			alive[i] = false;
-			--table.players[i].respawnTime;
 		}
 		else
 			alive[i] = true;
 		willDie[i] = false;
 	}
-	
+	resetBoom();
 	// Doing the actual actions
-	for(int currentAction = 0; currentAction < DEFAULT_SPEED && table.gameState == PLAYING; ++currentAction){
+	int currentAction = whatAction;
 		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 			if(alive[i] == false || table.players[i].speed <= currentAction)
 				continue;
@@ -238,10 +240,12 @@ void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS]){
 				killPlayer(table, i); 
 			willDie[i] = false;
 		}
-	}
 	
 	// Respawn players
+	if(whatAction == 2)
 	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
+		if(table.players[i].respawnTime != 0)
+			--table.players[i].respawnTime;
 		if(alive[i] == false && table.players[i].respawnTime == 0)
 			respawnPlayer(table, i);
 	}
