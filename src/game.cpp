@@ -3,10 +3,10 @@
 #include <queue>
 #include <vector>
 #include <stdlib.h>
-
+#include <time.h>
 const int dr[5] = {0, -1, 0, 1, 0};
 const int dc[5] = {0, 0, -1, 0, 1};
-int dist[ROWS][COLUMNS];
+int _DISTANCE[ROWS][COLUMNS];
 int DEFAULT_MAP[ROWS][COLUMNS];
 int DEFAULT_RESPAWN_TIME = 10;
 void getDefaultMap(){
@@ -108,11 +108,16 @@ void killPlayer (GameTable &table, int player){
 	}
 	table.players[player].respawnTime = DEFAULT_RESPAWN_TIME;
 	table.players[player].speed = DEFAULT_SPEED;
+	
+	//maybe yes maybe no
+	srand(time(0));
+	table.players[player].position = spawns[table.players[player].team][rand() % NUMBER_OF_SPAWNS];
 }
 
 
 void respawnPlayer (GameTable &table, int player){
-	table.players[player].position = spawns[table.players[player].team][rand() % NUMBER_OF_SPAWNS];
+	
+	//table.players[player].position = spawns[table.players[player].team][rand() % NUMBER_OF_SPAWNS];
 	
 	assert(table.players[player].hasFlag == false);
 	assert(table.players[player].speed == DEFAULT_SPEED);
@@ -124,7 +129,7 @@ std::vector <Coordinates> allPos;
 void resetBoom ()
 {
 	for(Coordinates coord : allPos)
-		dist[coord.row][coord.col] = 0;
+		_DISTANCE[coord.row][coord.col] = 0;
 	allPos.clear();
 }
 
@@ -133,7 +138,7 @@ void makeBoom(GameTable &table, int player){
 	
 	q.push(table.players[player].position);
 	allPos.push_back(table.players[player].position);
-	dist[table.players[player].position.row][table.players[player].position.col] = 1;
+	_DISTANCE[table.players[player].position.row][table.players[player].position.col] = 1;
 	
 	while(q.size()){
 		Coordinates cur = q.front();
@@ -146,13 +151,13 @@ void makeBoom(GameTable &table, int player){
 				willDie[pl] = true;
 			}
 		}
-		if(dist[cur.row][cur.col] == EXPLOSION_RADIUS)
+		if(_DISTANCE[cur.row][cur.col] == EXPLOSION_RADIUS)
 			continue;
 		for(int dir = 1; dir<=4; dir++){
 			Coordinates newcur(cur.row + dr[dir], cur.col + dc[dir]);
-			if(DEFAULT_MAP[newcur.row][newcur.col] == CELL_FREE && dist[newcur.row][newcur.col] == 0 && dist[cur.row][cur.col] < EXPLOSION_RADIUS){
+			if(DEFAULT_MAP[newcur.row][newcur.col] == CELL_FREE && _DISTANCE[newcur.row][newcur.col] == 0 && _DISTANCE[cur.row][cur.col] < EXPLOSION_RADIUS){
 				q.push(newcur);
-				dist[newcur.row][newcur.col] = 1 + dist[cur.row][cur.col];
+				_DISTANCE[newcur.row][newcur.col] = 1 + _DISTANCE[cur.row][cur.col];
 			}
 		}
 	}
@@ -209,14 +214,15 @@ void makeMove (GameTable &table, int player, int moveType){
 void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int whatAction){
 	
 	// Determine what players are alive
-	if(whatAction == 0)
-	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
-		if(table.players[i].respawnTime != 0){
-			alive[i] = false;
+	if(whatAction == 0){
+		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
+			if(table.players[i].respawnTime != 0){
+				alive[i] = false;
+			}
+			else
+				alive[i] = true;
+			willDie[i] = false;
 		}
-		else
-			alive[i] = true;
-		willDie[i] = false;
 	}
 	resetBoom();
 	// Doing the actual actions
@@ -242,12 +248,13 @@ void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int w
 		}
 	
 	// Respawn players
-	if(whatAction == 2)
-	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
-		if(table.players[i].respawnTime != 0)
-			--table.players[i].respawnTime;
-		if(alive[i] == false && table.players[i].respawnTime == 0)
-			respawnPlayer(table, i);
+	if(whatAction == 2){
+		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
+			if(table.players[i].respawnTime != 0)
+				--table.players[i].respawnTime;
+			if(alive[i] == false && table.players[i].respawnTime == 0)
+				respawnPlayer(table, i);
+		}
 	}
 }
 

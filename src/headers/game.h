@@ -12,8 +12,8 @@ const int NUMBER_OF_PLAYERS = 10;
 
 //player parametres
 const int NUMBER_OF_TEAMS = 2; 
-const char RED_TEAM = 0;
-const char BLUE_TEAM = 1;
+const int RED_TEAM = 0;
+const int BLUE_TEAM = 1;
 
 const int TEAMS[2] = {RED_TEAM, BLUE_TEAM};
 
@@ -45,7 +45,7 @@ const int SLOW_SPEED = 2;
 /* TODO: make it constant
 */
 extern int DEFAULT_MAP[ROWS][COLUMNS];
-extern int dist[ROWS][COLUMNS];
+extern int _DISTANCE[ROWS][COLUMNS];
 const int CELL_FREE = 0;
 const int CELL_OCCUPIED = 1;
 
@@ -64,14 +64,14 @@ struct Coordinates{
 
 const int NUMBER_OF_SPAWNS = 2;
 //spawn positions
-const Coordinates spawns[NUMBER_OF_TEAMS][NUMBER_OF_SPAWNS] ={ {(Coordinates){15, 69}, (Coordinates){28, 81} },
+const Coordinates spawns[NUMBER_OF_TEAMS][NUMBER_OF_SPAWNS] ={ {(Coordinates){17, 70}, (Coordinates){28, 81} },
 											    {				(Coordinates){82, 30}, (Coordinates){72, 19} }  
 											  };
 
 //flag home positions
 const Coordinates flag_home[NUMBER_OF_TEAMS] = {(Coordinates){12, 87},
 											    (Coordinates){87, 12}};
-
+											    
 //flag constants
 const int AT_HOME = -1;
 const int ON_GROUND = -2;
@@ -81,7 +81,7 @@ struct PlayerState{
 	int speed;
 	int respawnTime; // is alive if respawnTime = 0, in ticks
 	
-	char team;
+	int team;
 	bool hasFlag;
 };
 struct FlagState{

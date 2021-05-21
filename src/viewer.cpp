@@ -73,14 +73,14 @@ void drawArena (int gameState, GameTable *table)
 	for(int i = 0; i < ROWS; ++i)
 		for(int j = 0; j < COLUMNS; ++j)
 		{
-			if(DEFAULT_MAP[i][j] == CELL_FREE && dist[i][j] == 0 && stillExploding[i][j] == 0)
+			if(DEFAULT_MAP[i][j] == CELL_FREE && _DISTANCE[i][j] == 0 && stillExploding[i][j] == 0)
 			{
 				glColor3f(0.8f, 0.8f, 0.8f);
 				float x = 0 - 1.5f + (float)j*0.03f;
 				float y = 0 + 1.5f - (float)i*0.03f;
 				drawSquare(x, y, 0.03f);
 			}
-			else if(DEFAULT_MAP[i][j] == CELL_FREE && dist[i][j] == 0)
+			else if(DEFAULT_MAP[i][j] == CELL_FREE && _DISTANCE[i][j] == 0)
 			{
 				glColor3f(0.96f, 0.6f, 0.23f);
 				float x = 0 - 1.5f + (float)j*0.03f;
