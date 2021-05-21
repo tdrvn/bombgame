@@ -68,9 +68,7 @@ void drawArena (int gameState, GameTable *table)
 	} else {
 		writeText("Game outcome: Unknown!\n");
 	}
-	// TODO:
-	// drawing the board and stuff
-	printf("printing sth\n");
+	//printf("printing sth\n");
 	//drawEmptySquare(0.0f, 0.0f, 1.5f);
 	for(int i = 0; i < ROWS; ++i)
 		for(int j = 0; j < COLUMNS; ++j)
@@ -113,7 +111,7 @@ void drawArena (int gameState, GameTable *table)
 		float y = 0 + 1.5f - (float)ii*0.03f;
 		x+=0.015;
 		y-=0.015;
-		drawRegPoly(x, y, 0.03f, 20);
+		drawRegPoly(x, y, 0.03f, 10);
 	}
 	glColor3f(0.9f, 0.0f, 0.0f);
 	int ii=table->flags[0].position.row;

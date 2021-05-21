@@ -25,7 +25,7 @@ void nextTick(int whatAction) {
 
 	if (gameState == PLAYING) {
 		if(whatAction == 0){
-			printf("nextTick\n");
+		//	printf("nextTick\n");
 			PlayerMessage currentMessage;
 			for(int currentPlayer = 0; currentPlayer < NUMBER_OF_PLAYERS; ++currentPlayer)
 			{
