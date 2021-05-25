@@ -85,9 +85,9 @@ bin/server.o: src/server.cpp src/headers/viewer.h src/headers/protocol.h src/hea
 bin/player.o: players/player.cpp src/headers/protocol.h src/headers/game.h | bin
 	g++ -c players/player.cpp -o bin/player.o
 
-#WHAT DO -lglut -lGL DO ?!?!?!?!
+#WHAT DO -lglut -lGL -pthread DO ?!?!?!?!
 bin/server: bin/server.o bin/viewer.o bin/game.o bin/protocol.o | bin
-	g++ bin/server.o bin/viewer.o bin/game.o bin/protocol.o -lglut -lGL -o bin/server
+	g++ bin/server.o bin/viewer.o bin/game.o bin/protocol.o -lglut -lGL -pthread -o bin/server
 
 bin/player: bin/player.o bin/game.o bin/protocol.o | bin
 	g++ bin/player.o bin/game.o bin/protocol.o -o bin/player
