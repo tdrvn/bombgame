@@ -25,6 +25,38 @@ PlayerMessage playerMessages[NUMBER_OF_PLAYERS];
 PlayerMessage oldPlayerMessages[NUMBER_OF_PLAYERS];
 
 
+GameTable nextTable;
+
+
+void nextTick(int whatAction) {
+	//auto currentTime = Clock::now();
+	//int duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastRenderTime).count();
+	
+	if (!communicationEnded) {
+		if(whatAction == 0){
+		//	printf("nextTick\n");
+			
+			PlayerMessage currentMessage;
+			for(int currentPlayer = 0; currentPlayer < NUMBER_OF_PLAYERS; ++currentPlayer)
+			{
+				oldPlayerMessages[currentPlayer] = playerMessages[currentPlayer];
+				playerMessages[currentPlayer] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
+			}
+			makeMovesTick(nextTable, oldPlayerMessages, 0);
+			makeMovesTick(nextTable, oldPlayerMessages, 1);
+			makeMovesTick(nextTable, oldPlayerMessages, 2);
+			gameState=nextTable.gameState;
+			currentTick++;
+		}
+		makeMovesTick(table, oldPlayerMessages, whatAction);
+		assert(gameState!=ERROR);
+		if(gameState != PLAYING && whatAction == 3)
+			communicationEnded = true;
+    } 
+  return;
+}
+
+
 struct ThreadArgs {
   int playerID;
   char* pipeFiles[2];
@@ -44,19 +76,19 @@ void *playerCommunication(void* arg) {
   auto lastTime = Clock::now();
   while (gameState == PLAYING) {
 	if(currentTick != lastTick){
-		lastTick = currentTick;
 		
 		PlayerMessage currentMessage;
-		int errorCode = sendGameState(pipes[0], ServerMessage{table, args->playerID}) || receiveMove(pipes[1], &currentMessage);
+		int errorCode = sendGameState(pipes[0], ServerMessage{nextTable, args->playerID}) || receiveMove(pipes[1], &currentMessage);
 		if(errorCode)
 			playerMessages[args->playerID] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
 		else
 			playerMessages[args->playerID] = currentMessage;
+		lastTick = currentTick;
     }
   }
   //Final gamestate
   
-  sendGameState(pipes[0], ServerMessage{table, args->playerID}); 
+  sendGameState(pipes[0], ServerMessage{nextTable, args->playerID}); 
   fclose(pipes[0]);
   fclose(pipes[1]);
   pthread_exit(NULL);
@@ -64,30 +96,6 @@ void *playerCommunication(void* arg) {
 
 
 
-
-
-void nextTick(int whatAction) {
-	//auto currentTime = Clock::now();
-	//int duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastRenderTime).count();
-	
-	if (gameState == PLAYING) {
-		if(whatAction == 0){
-		//	printf("nextTick\n");
-			
-			currentTick++;
-			PlayerMessage currentMessage;
-			for(int currentPlayer = 0; currentPlayer < NUMBER_OF_PLAYERS; ++currentPlayer)
-			{
-				oldPlayerMessages[currentPlayer] = playerMessages[currentPlayer];
-				playerMessages[currentPlayer] = {MOVE_STAY, MOVE_STAY, MOVE_STAY};
-			}
-		}
-		makeMovesTick(table, oldPlayerMessages, whatAction);
-		gameState=table.gameState;
-		assert(gameState!=ERROR);
-    } 
-  return;
-}
 
 int main(int argc, char** argv) {
 
@@ -102,6 +110,7 @@ int main(int argc, char** argv) {
 	
 	gameState = PLAYING;
 	initGameTable(table);
+	nextTable = table;
 	communicationEnded = false;
 	currentTick = 0;
 	

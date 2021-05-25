@@ -57,7 +57,7 @@ void PlayTarget(FILE *readP, FILE *writeP, int player_target){
 		q.push(target);
 		prev[target.row][target.col] = MOVE_STAY;
 		dist[target.row][target.col] = 1;
-		printf("%d\n",DEFAULT_MAP[0][0]);
+		//printf("%d\n",DEFAULT_MAP[0][0]);
 		while(q.size()){
 			Coordinates cur = q.front();
 			q.pop();
@@ -126,7 +126,7 @@ void PlayAttack(FILE *readP, FILE *writeP){
 		std::queue<Coordinates> q = std::queue<Coordinates> ();
 		q.push(target);
 		prev[target.row][target.col] = MOVE_STAY;
-		printf("%d\n",DEFAULT_MAP[0][0]);
+		//printf("%d\n",DEFAULT_MAP[0][0]);
 		while(q.size()){
 			Coordinates cur = q.front();
 			q.pop();
