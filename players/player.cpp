@@ -5,6 +5,9 @@
 #include "../src/headers/protocol.h"
 #include <queue>
 #include <time.h>
+#include <thread>
+#include <chrono>
+
 void PlayRandom(FILE *readP, FILE *writeP, int RANDOM_SEED){
 	srand(RANDOM_SEED);
 	ServerMessage serverMessage;
@@ -109,7 +112,9 @@ void PlayAttack(FILE *readP, FILE *writeP){
 	receiveGameState(readP, &serverMessage);
 	  
 	int IAm = serverMessage.currentPlayer;
+	
 	while (serverMessage.table.gameState == PLAYING) {
+		//std::this_thread::sleep_for(std::chrono::milliseconds(160)); //
 		PlayerState me = serverMessage.table.players[IAm];
 		Coordinates target;
 		if(me.hasFlag)
@@ -186,6 +191,6 @@ int main(int argc, char** argv) {
 	for (int i : {0, 1}) {
 		fclose(pipes[i]);
 	}
-	printf("Player ends gracefully!\n");
+	printf("Player ends gracefully!\n");//
 	return 0;
 }

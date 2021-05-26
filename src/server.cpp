@@ -49,8 +49,10 @@ void nextTick(int whatAction) {
 			currentTick++;
 		}
 		makeMovesTick(table, oldPlayerMessages, whatAction);
-		assert(gameState!=ERROR);
-		if(gameState != PLAYING && whatAction == 3)
+		if(whatAction == 2)
+			table = nextTable;
+		assert(gameState != ERROR);
+		if(gameState != PLAYING && whatAction == 2)
 			communicationEnded = true;
     } 
   return;
@@ -123,6 +125,6 @@ int main(int argc, char** argv) {
   
 	
 	
-	mainLoop(argc, argv);
+	mainLoop(argc, argv);//
 	return 0;
 }
