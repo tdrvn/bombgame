@@ -42,17 +42,16 @@ void nextTick(int whatAction) {
 				oldPlayerMessages[currentPlayer] = playerMessages[currentPlayer];
 				playerMessages[currentPlayer] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
 			}
-			makeMovesTick(nextTable, oldPlayerMessages, 0);
-			makeMovesTick(nextTable, oldPlayerMessages, 1);
-			makeMovesTick(nextTable, oldPlayerMessages, 2);
+			for(int i = 0; i < MAX_SPEED; i++)
+				makeMovesTick(nextTable, oldPlayerMessages, i);
 			gameState=nextTable.gameState;
 			currentTick++;
 		}
 		makeMovesTick(table, oldPlayerMessages, whatAction);
-		if(whatAction == 2)
+		if(whatAction == MAX_SPEED - 1)
 			table = nextTable;
 		assert(gameState != ERROR);
-		if(gameState != PLAYING && whatAction == 2)
+		if(gameState != PLAYING && whatAction == MAX_SPEED - 1)
 			communicationEnded = true;
     } 
   return;

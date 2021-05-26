@@ -41,7 +41,7 @@ void initGameTable(GameTable &table){
 	getDefaultMap();
 	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 		table.players[i].hasFlag = false;
-		if(i < 5)
+		if(i < NUMBER_OF_PLAYERS/2)
 			table.players[i].team = RED_TEAM;
 		else
 			table.players[i].team = BLUE_TEAM;
@@ -249,7 +249,7 @@ void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int w
 		}
 	
 	// Respawn players
-	if(whatAction == 2){
+	if(whatAction == MAX_SPEED - 1){
 		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 			if(table.players[i].respawnTime != 0)
 				--table.players[i].respawnTime;

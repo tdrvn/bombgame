@@ -156,7 +156,7 @@ void actualLoop (int a)
 	nextTick(whatAction);
 	glutPostRedisplay();
 	whatAction++;
-	whatAction%=3;
+	whatAction%=MAX_SPEED;
 }
 int mainLoop(int argc, char **argv) {
 	glutInit(&argc, argv);
