@@ -152,9 +152,9 @@ void onWindowResize(int w, int h) {
 int whatAction = 0;
 void actualLoop (int a)
 {
-	glutTimerFunc(50, actualLoop, -1);
+	glutTimerFunc(30, actualLoop, -1);
 	nextTick(whatAction);
-	glutPostRedisplay();
+	glutPostRedisplay();//
 	whatAction++;
 	whatAction%=MAX_SPEED;
 }

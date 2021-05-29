@@ -22,6 +22,7 @@ const int TEAMS[2] = {RED_TEAM, BLUE_TEAM};
 extern int DEFAULT_RESPAWN_TIME; // TBD
 
 const int EXPLOSION_RADIUS = 6; // TBD
+const int VIEW_RADIUS = 10;
 
 //game states
 const int ERROR = 0;
@@ -61,14 +62,17 @@ struct Coordinates{
 	bool operator == (Coordinates other) const{
 		return row == other.row && col == other.col;
 	}
+	bool operator != (Coordinates other) const{
+		return !((*this) == other);
+	}
 };
 
 const int NUMBER_OF_SPAWNS = 2;
-//spawn positions
+//spawn positions! 
 const Coordinates spawns[NUMBER_OF_TEAMS][NUMBER_OF_SPAWNS] ={ {(Coordinates){17, 70}, (Coordinates){28, 81} },
 											    {				(Coordinates){82, 30}, (Coordinates){72, 19} }  
 											  };
-
+const Coordinates UNKNOWN_POSITION = {-1, -1};
 //flag home positions
 const Coordinates flag_home[NUMBER_OF_TEAMS] = {(Coordinates){12, 87},
 											    (Coordinates){87, 12}};
@@ -112,3 +116,4 @@ struct PlayerMessage {
 void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int whatAction);
 void initGameTable(GameTable &table);
 void getDefaultMap();
+GameTable hidePlayers(GameTable table, int team);

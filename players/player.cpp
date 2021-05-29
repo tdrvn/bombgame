@@ -31,9 +31,9 @@ void PlayRandom(FILE *readP, FILE *writeP, int RANDOM_SEED){
 		receiveGameState(readP, &serverMessage);
 	}
 }
+//
 
-
-void PlayTarget(FILE *readP, FILE *writeP, int player_target){
+void PlayTarget(FILE *readP, FILE *writeP){
 	ServerMessage serverMessage;
 	int dr[5] = {0, -1, 0, 1, 0};
 	int dc[5] = {0, 0, -1, 0, 1};
@@ -41,12 +41,15 @@ void PlayTarget(FILE *readP, FILE *writeP, int player_target){
 	PlayerMessage myMessage;
 	
 	receiveGameState(readP, &serverMessage);
-	  
 	int IAm = serverMessage.currentPlayer;
+	int team = IAm / 5;
 	while (serverMessage.table.gameState == PLAYING) {
 		PlayerState me = serverMessage.table.players[IAm];
-		Coordinates target = serverMessage.table.players[player_target].position;
-		
+		Coordinates target = spawns[1 - team][rand()%2];
+		for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
+			if(serverMessage.table.players[i].team != team && serverMessage.table.players[i].position != UNKNOWN_POSITION)
+				target = serverMessage.table.players[i].position;
+		}
 		int prev[ROWS][COLUMNS];
 		int dist[ROWS][COLUMNS];
 		for(int i = 0; i < ROWS; i++){
@@ -103,6 +106,7 @@ void PlayTarget(FILE *readP, FILE *writeP, int player_target){
 }
 
 void PlayAttack(FILE *readP, FILE *writeP){
+	
 	ServerMessage serverMessage;
 	int dr[5] = {0, -1, 0, 1, 0};
 	int dc[5] = {0, 0, -1, 0, 1};
@@ -112,9 +116,10 @@ void PlayAttack(FILE *readP, FILE *writeP){
 	receiveGameState(readP, &serverMessage);
 	  
 	int IAm = serverMessage.currentPlayer;
-	
+	//printf("%d\n", serverMessage.table.gameState);
 	while (serverMessage.table.gameState == PLAYING) {
 		//std::this_thread::sleep_for(std::chrono::milliseconds(160)); //
+		//printf("checkpoint 2\n");
 		PlayerState me = serverMessage.table.players[IAm];
 		Coordinates target;
 		if(me.hasFlag)
@@ -183,10 +188,7 @@ int main(int argc, char** argv) {
 	}
 	else if(argv[3][0] == 'T'){
 		srand(id * time(0));
-		if(id <5)
-			PlayTarget(pipes[0], pipes[1], rand()%5 + 5);
-		else
-			PlayTarget(pipes[0], pipes[1], rand()%5 );
+		PlayTarget(pipes[0], pipes[1]);
 	}
 	for (int i : {0, 1}) {
 		fclose(pipes[i]);

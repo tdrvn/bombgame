@@ -27,6 +27,7 @@ PlayerMessage oldPlayerMessages[NUMBER_OF_PLAYERS];
 
 GameTable nextTable;
 
+GameTable hiddenTable[2];
 
 void nextTick(int whatAction) {
 	//auto currentTime = Clock::now();
@@ -45,6 +46,8 @@ void nextTick(int whatAction) {
 			for(int i = 0; i < MAX_SPEED; i++)
 				makeMovesTick(nextTable, oldPlayerMessages, i);
 			gameState=nextTable.gameState;
+			hiddenTable[0] = hidePlayers(nextTable, 0);
+			hiddenTable[1] = hidePlayers(nextTable, 1);
 			currentTick++;
 		}
 		makeMovesTick(table, oldPlayerMessages, whatAction);
@@ -79,7 +82,7 @@ void *playerCommunication(void* arg) {
 	if(currentTick != lastTick){
 		
 		PlayerMessage currentMessage;
-		int errorCode = sendGameState(pipes[0], ServerMessage{nextTable, args->playerID}) || receiveMove(pipes[1], &currentMessage);
+		int errorCode = sendGameState(pipes[0], ServerMessage{hiddenTable[args->playerID/5], args->playerID}) || receiveMove(pipes[1], &currentMessage);
 		if(errorCode)
 			playerMessages[args->playerID] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
 		else
@@ -112,6 +115,11 @@ int main(int argc, char** argv) {
 	gameState = PLAYING;
 	initGameTable(table);
 	nextTable = table;
+			
+	hiddenTable[0] = hidePlayers(nextTable, 0);
+			
+	hiddenTable[1] = hidePlayers(nextTable, 1);
+	
 	communicationEnded = false;
 	currentTick = 0;
 	
@@ -121,7 +129,7 @@ int main(int argc, char** argv) {
 		printf("Main Thread\n");
 	}
 
-  
+  //
 	
 	
 	mainLoop(argc, argv);//

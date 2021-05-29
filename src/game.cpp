@@ -258,4 +258,58 @@ void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int w
 		}
 	}
 }
+//
 
+bool inBounds(Coordinates pos){
+	if(pos != UNKNOWN_POSITION && pos.row >= 0 && pos.row < ROWS && pos.col >= 0 && pos.col < COLUMNS)
+		return true;
+	return false;
+}
+int _VIEW_DISTANCE[ROWS][COLUMNS];
+GameTable hidePlayers(GameTable table, int team){
+	for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
+		if(inBounds(table.players[i].position) == false){
+			printf("Wrong information stop cheating !! ");
+			assert(false);
+		}
+	}
+	GameTable newTable = table;
+	std::queue <Coordinates> q;
+	std::vector<Coordinates> visited;
+	
+	for(int i = team * 5; i < (team + 1) * 5; i++){
+		q.push(table.players[i].position);
+		visited.push_back(table.players[i].position);
+		_VIEW_DISTANCE[table.players[i].position.row][table.players[i].position.col] = 1;
+	}
+	
+	
+	while(q.size()){
+		Coordinates cur = q.front();
+		
+		visited.push_back(cur);
+		
+		q.pop();
+		
+		if(_VIEW_DISTANCE[cur.row][cur.col] == VIEW_RADIUS)
+			continue;
+		for(int dir = 1; dir<=4; dir++){
+			Coordinates newcur(cur.row + dr[dir], cur.col + dc[dir]);
+			if(DEFAULT_MAP[newcur.row][newcur.col] == CELL_FREE && _VIEW_DISTANCE[newcur.row][newcur.col] == 0 && _VIEW_DISTANCE[cur.row][cur.col] < VIEW_RADIUS){
+				q.push(newcur);
+				_VIEW_DISTANCE[newcur.row][newcur.col] = 1 + _VIEW_DISTANCE[cur.row][cur.col];
+			}
+		}
+	}
+	for(int i = (1 - team) * 5; i < (2 - team) * 5; i++){
+		Coordinates pos = table.players[i].position;
+		int manh_dist = abs(pos.row - flag_home[team].row) + abs(pos.col - flag_home[team].col);
+		if(_VIEW_DISTANCE[pos.row][pos.col] == 0 && table.players[i].hasFlag == false && manh_dist > 13){
+			newTable.players[i].position = UNKNOWN_POSITION;
+		}
+	}
+	for(Coordinates pos : visited)
+		_VIEW_DISTANCE[pos.row][pos.col] = 0;
+	visited.clear();
+	return newTable;
+}
