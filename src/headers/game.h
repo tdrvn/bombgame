@@ -1,5 +1,6 @@
 #pragma once
 #include <cassert>
+#include <initializer_list>
 
 // map parameteres
 const int ROWS = 100;
@@ -17,6 +18,13 @@ const int RED_TEAM = 0;
 const int BLUE_TEAM = 1;
 
 const int TEAMS[2] = {RED_TEAM, BLUE_TEAM};
+
+//PLAYER CLASSES CONSTANTS
+
+const int BOMBER = 0;
+const int NINJA = 1;
+const int TANK = 2;
+
 
 // not const since it might change over the course of the game
 extern int DEFAULT_RESPAWN_TIME; // TBD
@@ -88,6 +96,8 @@ struct PlayerState{
 	
 	int team;
 	bool hasFlag;
+	
+	int classType;
 };
 struct FlagState{
 	Coordinates position;
@@ -104,11 +114,18 @@ struct GameTable{
 
 // actions to be made by player
 struct PlayerMessage {
-	int actions[3];
-	PlayerMessage(int first = 0, int second = 0, int third = 0){
-			actions[0] = first;
-			actions[1] = second;
-			actions[2] = third;
+	int actions[MAX_SPEED];
+	PlayerMessage( std::initializer_list<int> listActions){
+		int cnt = 0;
+		for(int e:listActions){
+			actions[cnt] = e;
+			cnt++;
+			if(cnt > MAX_SPEED)
+				break;
+		}
+	}
+	PlayerMessage(){
+		(*this) = PlayerMessage({});
 	}
 };
 

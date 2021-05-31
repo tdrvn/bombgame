@@ -112,10 +112,21 @@ int main(int argc, char** argv) {
 	}
 	
 	
+	
 	gameState = PLAYING;
 	initGameTable(table);
+	
+	
+	for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
+		printf("Waiting for initial message from player %d\n", i);
+		PlayerInitMessage m;
+		receiveInitPlayer(threadArgs[i].pipeFiles[1], m);
+		
+		table.players[i].classType = m.type;
+		printf("Player %d is of class %d\n", i, table.players[i].classType)
+	}
+	
 	nextTable = table;
-			
 	hiddenTable[0] = hidePlayers(nextTable, 0);
 			
 	hiddenTable[1] = hidePlayers(nextTable, 1);

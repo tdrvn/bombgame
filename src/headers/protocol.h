@@ -9,6 +9,9 @@ struct ServerMessage {
 	int currentPlayer;
 };
 
+struct PlayerInitMessage{
+	int type;
+};
 
 void sendMove(FILE *pipe, PlayerMessage m);
 
@@ -17,3 +20,8 @@ int receiveMove(FILE *pipe, PlayerMessage *m);
 int sendGameState(FILE *pipe, ServerMessage m);
 
 void receiveGameState(FILE *pipe, ServerMessage *m);
+
+
+
+void receiveInitPlayer(FILE *pipe, PlayerInitMessage *m);
+int sendInitPlayer(FILE *pipe, PlayerInitMessage m);
