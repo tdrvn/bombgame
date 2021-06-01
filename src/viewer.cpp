@@ -102,9 +102,19 @@ void drawArena (int gameState, GameTable *table)
 		if(table->players[i].respawnTime > 0)
 			continue;
 		if(table->players[i].team == RED_TEAM)
-			glColor3f(0.9f, 0.0f, 0.0f);
+		{
+			if(table->players[i].classType == TANK)
+				glColor3f(0.8f, 0.5f, 0.0f);
+			else
+				glColor3f(0.9f, 0.0f, 0.0f);
+		}
 		else
-			glColor3f(0.0f, 0.0f, 0.9f);
+		{
+			if(table->players[i].classType == TANK)
+				glColor3f(0.0f, 0.5f, 0.8f);
+			else
+				glColor3f(0.0f, 0.0f, 0.9f);
+		}
 		int ii=table->players[i].position.row;
 		int jj=table->players[i].position.col;
 		float x = 0 - 1.5f + (float)jj*0.03f;

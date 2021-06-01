@@ -45,12 +45,13 @@ const int MOVE_UP = 1;
 const int MOVE_LEFT = 2;
 const int MOVE_DOWN = 3;
 const int MOVE_RIGHT = 4;
-const int MOVE_BOOM = 5;
+const int MOVE_ABILITY = 5;
 
-//TODO : SET SPEEDS
 const int DEFAULT_SPEED[3] = {3, 4, 2};
 const int SLOW_SPEED[3] = {2, 3, 2};
 const int MAX_SPEED = 4;
+
+const int DEFAULT_HP[3] = {1, 1, 2};
 
 /* TODO: make it constant
 */
@@ -94,6 +95,7 @@ struct PlayerState{
 	int speed;
 	int respawnTime; // is alive if respawnTime = 0, in ticks
 	
+	int hp;
 	int team;
 	bool hasFlag;
 	

@@ -23,7 +23,7 @@ void PlayRandom(FILE *readP, FILE *writeP, int RANDOM_SEED){
 		for(int i = 0; i < serverMessage.table.players[IAm].speed; ++i)
 		{
 			if((rand()^rand())%500==0)
-				myMessage.actions[i] = MOVE_BOOM;
+				myMessage.actions[i] = MOVE_ABILITY;
 			else
 				myMessage.actions[i] = (rand()^rand()) % 5;
 		}
@@ -86,7 +86,7 @@ void PlayTarget(FILE *readP, FILE *writeP){
 			int val = prev[pos.row][pos.col];
 			int dst = dist[pos.row][pos.col];
 			if(dst <= 4){
-				myMessage.actions[i] = MOVE_BOOM;
+				myMessage.actions[i] = MOVE_ABILITY;
 				continue;
 			}
 				

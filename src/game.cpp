@@ -47,6 +47,7 @@ void initGameTable(GameTable &table){
 			table.players[i].team = BLUE_TEAM;
 		table.players[i].respawnTime = 0;
 		table.players[i].speed = DEFAULT_SPEED[table.players[i].classType];
+		table.players[i].hp = DEFAULT_HP[table.players[i].classType];
 		table.players[i].position = spawns[table.players[i].team][rand() % NUMBER_OF_SPAWNS];
 	}
 	for(int i = 0; i < NUMBER_OF_TEAMS; ++i){
@@ -120,6 +121,8 @@ void respawnPlayer (GameTable &table, int player){
 	
 	//table.players[player].position = spawns[table.players[player].team][rand() % NUMBER_OF_SPAWNS];
 	
+	table.players[player].hp = DEFAULT_HP[table.players[player].classType];
+	
 	assert(table.players[player].hasFlag == false);
 	assert(table.players[player].speed == DEFAULT_SPEED[table.players[player].classType]);
 	
@@ -149,7 +152,10 @@ void makeBoom(GameTable &table, int player){
 		q.pop();
 		for(int pl = 0; pl < NUMBER_OF_PLAYERS; pl++){
 			if(table.players[pl].position == cur){
-				willDie[pl] = true;
+				if(table.players[pl].hp)
+					--table.players[pl].hp;
+				if(table.players[pl].hp == 0)
+					willDie[pl] = true;
 			}
 		}
 		if(_DISTANCE[cur.row][cur.col] == EXPLOSION_RADIUS)
@@ -231,14 +237,14 @@ void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int w
 		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 			if(alive[i] == false || table.players[i].speed <= currentAction)
 				continue;
-			if(msg[i].actions[currentAction] != MOVE_BOOM)
+			if(msg[i].actions[currentAction] != MOVE_ABILITY)
 				makeMove(table, i, msg[i].actions[currentAction]);
 		}
 		
 		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 			if(alive[i] == false || table.players[i].speed <= currentAction)
 				continue;
-			if(msg[i].actions[currentAction] == MOVE_BOOM)
+			if(msg[i].actions[currentAction] == MOVE_ABILITY)
 				makeBoom(table, i);
 		}
 		
