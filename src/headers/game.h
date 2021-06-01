@@ -48,8 +48,8 @@ const int MOVE_RIGHT = 4;
 const int MOVE_BOOM = 5;
 
 //TODO : SET SPEEDS
-const int DEFAULT_SPEED = 3;
-const int SLOW_SPEED = 2;
+const int DEFAULT_SPEED[3] = {3, 4, 2};
+const int SLOW_SPEED[3] = {2, 3, 2};
 const int MAX_SPEED = 4;
 
 /* TODO: make it constant

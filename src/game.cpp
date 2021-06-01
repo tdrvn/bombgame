@@ -46,7 +46,7 @@ void initGameTable(GameTable &table){
 		else
 			table.players[i].team = BLUE_TEAM;
 		table.players[i].respawnTime = 0;
-		table.players[i].speed = DEFAULT_SPEED;
+		table.players[i].speed = DEFAULT_SPEED[table.players[i].classType];
 		table.players[i].position = spawns[table.players[i].team][rand() % NUMBER_OF_SPAWNS];
 	}
 	for(int i = 0; i < NUMBER_OF_TEAMS; ++i){
@@ -91,7 +91,7 @@ void interactWithFlag(GameTable &table, int player){
 
 		table.flags[enemyTeam].isAtPlayer = player;
 		table.players[player].hasFlag = true;
-		table.players[player].speed = SLOW_SPEED;
+		table.players[player].speed = SLOW_SPEED[table.players[player].classType];
 	}
 
 }
@@ -107,7 +107,7 @@ void killPlayer (GameTable &table, int player){
 		assert(table.flags[1 - currentTeam].position == table.players[player].position);
 	}
 	table.players[player].respawnTime = DEFAULT_RESPAWN_TIME;
-	table.players[player].speed = DEFAULT_SPEED;
+	table.players[player].speed = DEFAULT_SPEED[table.players[player].classType];
 	alive[player] = false;
 	
 	//maybe yes maybe no
@@ -121,7 +121,7 @@ void respawnPlayer (GameTable &table, int player){
 	//table.players[player].position = spawns[table.players[player].team][rand() % NUMBER_OF_SPAWNS];
 	
 	assert(table.players[player].hasFlag == false);
-	assert(table.players[player].speed == DEFAULT_SPEED);
+	assert(table.players[player].speed == DEFAULT_SPEED[table.players[player].classType]);
 	
 	interactWithFlag(table, player);
 }
