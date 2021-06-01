@@ -43,7 +43,7 @@ void receiveGameState(FILE *pipe, ServerMessage *m) {
 }
 
 
-int sendGameState(FILE *pipe, PlayerInitMessage m) {
+int sendInitPlayer(FILE *pipe, PlayerInitMessage m) {
   sigpipeReceived = 0;
   signal(SIGPIPE, sigpipeHandler);
   fwrite(&m, sizeof(PlayerInitMessage), 1, pipe);

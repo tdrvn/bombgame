@@ -6,6 +6,7 @@
 #include "headers/protocol.h"
 #include "headers/viewer.h"
 #include "pthread.h"
+#include <thread>
 
 typedef std::chrono::high_resolution_clock Clock;
 auto lastRenderTime = Clock::now();
@@ -70,32 +71,34 @@ pthread_mutex_t gameLock;
 
 void *playerCommunication(void* arg) {
   
-  ThreadArgs* args = (ThreadArgs*)arg;
-  printf("Thread communication %d started.\n", args->playerID);
-  FILE *pipes[2];
-  pipes[0] = fopen(args->pipeFiles[0], "wb");
-  pipes[1] = fopen(args->pipeFiles[1], "rb");
+	ThreadArgs* args = (ThreadArgs*)arg;
+	printf("Thread communication %d started.\n", args->playerID);
+	FILE *pipes[2];
+	pipes[0] = fopen(args->pipeFiles[0], "wb");
+	pipes[1] = fopen(args->pipeFiles[1], "rb");
   
-  int lastTick =  -1;
-  auto lastTime = Clock::now();
-  while (gameState == PLAYING) {
-	if(currentTick != lastTick){
+	int lastTick =  -1;
+	auto lastTime = Clock::now();
+	while (gameState == PLAYING) {
+		if(currentTick != lastTick) {
 		
-		PlayerMessage currentMessage;
-		int errorCode = sendGameState(pipes[0], ServerMessage{hiddenTable[args->playerID/5], args->playerID}) || receiveMove(pipes[1], &currentMessage);
-		if(errorCode)
-			playerMessages[args->playerID] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
-		else
-			playerMessages[args->playerID] = currentMessage;
-		lastTick = currentTick;
-    }
-  }
-  //Final gamestate
+			PlayerMessage currentMessage;
+			int errorCode = sendGameState(pipes[0], ServerMessage{hiddenTable[args->playerID/5], args->playerID}) || receiveMove(pipes[1], &currentMessage);
+			if(errorCode)
+				playerMessages[args->playerID] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
+			else
+				playerMessages[args->playerID] = currentMessage;
+			lastTick = currentTick;
+		} else {
+			std::this_thread::sleep_for(std::chrono::milliseconds(60));
+		}
+	}
+	//Final gamestate
   
-  sendGameState(pipes[0], ServerMessage{nextTable, args->playerID}); 
-  fclose(pipes[0]);
-  fclose(pipes[1]);
-  pthread_exit(NULL);
+	sendGameState(pipes[0], ServerMessage{nextTable, args->playerID}); 
+	fclose(pipes[0]);
+	fclose(pipes[1]);
+	pthread_exit(NULL);
 }
 
 
@@ -120,10 +123,10 @@ int main(int argc, char** argv) {
 	for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
 		printf("Waiting for initial message from player %d\n", i);
 		PlayerInitMessage m;
-		receiveInitPlayer(threadArgs[i].pipeFiles[1], m);
+		receiveInitPlayer(fopen(threadArgs[i].pipeFiles[1], "rb") , &m);
 		
 		table.players[i].classType = m.type;
-		printf("Player %d is of class %d\n", i, table.players[i].classType)
+		printf("Player %d is of class %d\n", i, table.players[i].classType);
 	}
 	
 	nextTable = table;
