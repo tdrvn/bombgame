@@ -42,7 +42,7 @@ void nextTick(int whatAction) {
 			for(int currentPlayer = 0; currentPlayer < NUMBER_OF_PLAYERS; ++currentPlayer)
 			{
 				oldPlayerMessages[currentPlayer] = playerMessages[currentPlayer];
-				playerMessages[currentPlayer] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
+				playerMessages[currentPlayer] = PlayerMessage({MOVE_STAY, MOVE_STAY, MOVE_STAY, MOVE_STAY});
 			}
 			for(int i = 0; i < MAX_SPEED; i++)
 				makeMovesTick(nextTable, oldPlayerMessages, i);
@@ -64,7 +64,7 @@ void nextTick(int whatAction) {
 
 struct ThreadArgs {
   int playerID;
-  char* pipeFiles[2];
+  FILE* pipes[2];
 };
 
 pthread_mutex_t gameLock;
@@ -73,9 +73,19 @@ void *playerCommunication(void* arg) {
   
 	ThreadArgs* args = (ThreadArgs*)arg;
 	printf("Thread communication %d started.\n", args->playerID);
-	FILE *pipes[2];
-	pipes[0] = fopen(args->pipeFiles[0], "wb");
-	pipes[1] = fopen(args->pipeFiles[1], "rb");
+	
+  
+  /*
+	printf("Waiting for initial message from player %d\n", args->playerID);
+	PlayerInitMessage m;
+	receiveInitPlayer( pipes[1] , &m);
+	table.players[args->playerID].classType = m.type;
+	printf("Player %d is of class %d\n", args->playerID, table.players[args->playerID].classType);
+  
+  */
+  
+  
+  
   
 	int lastTick =  -1;
 	auto lastTime = Clock::now();
@@ -83,9 +93,9 @@ void *playerCommunication(void* arg) {
 		if(currentTick != lastTick) {
 		
 			PlayerMessage currentMessage;
-			int errorCode = sendGameState(pipes[0], ServerMessage{hiddenTable[args->playerID/5], args->playerID}) || receiveMove(pipes[1], &currentMessage);
+			int errorCode = sendGameState(args->pipes[0], ServerMessage{hiddenTable[args->playerID/5], args->playerID}) || receiveMove(args->pipes[1], &currentMessage);
 			if(errorCode)
-				playerMessages[args->playerID] = (MOVE_STAY, MOVE_STAY, MOVE_STAY);
+				playerMessages[args->playerID] = PlayerMessage({MOVE_STAY, MOVE_STAY, MOVE_STAY, MOVE_STAY});
 			else
 				playerMessages[args->playerID] = currentMessage;
 			lastTick = currentTick;
@@ -95,9 +105,9 @@ void *playerCommunication(void* arg) {
 	}
 	//Final gamestate
   
-	sendGameState(pipes[0], ServerMessage{nextTable, args->playerID}); 
-	fclose(pipes[0]);
-	fclose(pipes[1]);
+	sendGameState(args->pipes[0], ServerMessage{nextTable, args->playerID}); 
+	fclose(args->pipes[0]);
+	fclose(args->pipes[1]);
 	pthread_exit(NULL);
 }
 
@@ -111,27 +121,27 @@ int main(int argc, char** argv) {
 	ThreadArgs threadArgs[NUMBER_OF_PLAYERS];
 	
 	for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
-		threadArgs[i] = {i, argv[2*i + 2], argv[2*i + 1]}; // first write then read
+		threadArgs[i].pipes[0] = fopen( argv[2*i + 2], "wb"); // first write then read
+		threadArgs[i].pipes[1] = fopen( argv[2*i + 1], "rb");
+		threadArgs[i].playerID =  i;
 	}
-	
-	
-	
-	gameState = PLAYING;
-	initGameTable(table);
 	
 	
 	for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
 		printf("Waiting for initial message from player %d\n", i);
 		PlayerInitMessage m;
-		receiveInitPlayer(fopen(threadArgs[i].pipeFiles[1], "rb") , &m);
+		
+		receiveInitPlayer( threadArgs[i].pipes[1] , &m);
 		
 		table.players[i].classType = m.type;
 		printf("Player %d is of class %d\n", i, table.players[i].classType);
 	}
 	
+	gameState = PLAYING;
+	initGameTable(table);
 	nextTable = table;
+	
 	hiddenTable[0] = hidePlayers(nextTable, 0);
-			
 	hiddenTable[1] = hidePlayers(nextTable, 1);
 	
 	communicationEnded = false;

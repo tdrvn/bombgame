@@ -6,6 +6,7 @@ int sigpipeReceived;
 
 void sigpipeHandler(int parameter) {
   sigpipeReceived = 1;
+  printf("SIGPIPE ERROR\n");
 }
 
 void sendMove(FILE *pipe, PlayerMessage m) {
@@ -44,15 +45,17 @@ void receiveGameState(FILE *pipe, ServerMessage *m) {
 
 
 int sendInitPlayer(FILE *pipe, PlayerInitMessage m) {
+
   sigpipeReceived = 0;
   signal(SIGPIPE, sigpipeHandler);
+ 
   fwrite(&m, sizeof(PlayerInitMessage), 1, pipe);
   fflush(pipe);
   return sigpipeReceived;
 }
 
 void receiveInitPlayer(FILE *pipe, PlayerInitMessage *m){
-	if (fread(m, sizeof(PlayerInitMessage), 1, pipe) != 1) {
+  if (fread(m, sizeof(PlayerInitMessage), 1, pipe) != 1) {
     //fprintf(stderr, "Server failure - receiveGameState!!!\n");
     //exit(0);
   }

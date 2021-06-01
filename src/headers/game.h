@@ -50,7 +50,7 @@ const int MOVE_BOOM = 5;
 //TODO : SET SPEEDS
 const int DEFAULT_SPEED = 3;
 const int SLOW_SPEED = 2;
-const int MAX_SPEED = 3;
+const int MAX_SPEED = 4;
 
 /* TODO: make it constant
 */
@@ -124,8 +124,7 @@ struct PlayerMessage {
 				break;
 		}
 	}
-	PlayerMessage(){
-		(*this) = PlayerMessage({});
+	PlayerMessage() : PlayerMessage({}){
 	}
 };
 
