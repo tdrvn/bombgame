@@ -29,6 +29,7 @@ const int TANK = 2;
 // not const since it might change over the course of the game
 extern int DEFAULT_RESPAWN_TIME; // TBD
 extern int DEFAULT_SLOW_TIME;
+extern int DEFAULT_INVISIBILITY_TIME;
 
 const int RADIUS[3] = {6, 4, 8};
 const int VIEW_RADIUS = 10;
@@ -98,6 +99,7 @@ struct PlayerState{
 	int speed;
 	int respawnTime; // is alive if respawnTime = 0, in ticks
 	int slowTime; // is not slowed if slowTime = 0, in ticks
+	int invisibleTime; // is visible if invisibleTime = 0, in ticks
 	int cooldown;
 	
 	int hp;

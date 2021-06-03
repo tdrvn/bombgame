@@ -10,6 +10,7 @@ int _DISTANCE[3][ROWS][COLUMNS];
 int DEFAULT_MAP[ROWS][COLUMNS];
 int DEFAULT_RESPAWN_TIME = 10;
 int DEFAULT_SLOW_TIME = 8;
+int DEFAULT_INVISIBILITY_TIME = 5;
 void getDefaultMap(){
 	
 	char readMap[ROWS][COLUMNS];
@@ -42,7 +43,7 @@ void initGameTable(GameTable &table){
 	getDefaultMap();
 	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 		table.players[i].hasFlag = false;
-		if(i < NUMBER_OF_PLAYERS/2)
+		if(i < NUMBER_OF_PLAYERS / 2)
 			table.players[i].team = RED_TEAM;
 		else
 			table.players[i].team = BLUE_TEAM;
@@ -50,6 +51,8 @@ void initGameTable(GameTable &table){
 		table.players[i].speed = DEFAULT_SPEED[0][table.players[i].classType];
 		table.players[i].hp = DEFAULT_HP[table.players[i].classType];
 		table.players[i].position = spawns[table.players[i].team][rand() % NUMBER_OF_SPAWNS];
+		table.players[i].invisibleTime = 0;
+		table.players[i].slowTime = 0;
 	}
 	for(int i = 0; i < NUMBER_OF_TEAMS; ++i){
 		table.flags[i].isAtPlayer = AT_HOME;
@@ -159,6 +162,10 @@ void makeAbility(GameTable &table, int player, int whatAbility){
 				}
 				else if(whatAbility == TANK && table.players[pl].team != table.players[player].team) {
 					table.players[pl].slowTime = DEFAULT_SLOW_TIME;
+					table.players[player].cooldown = COOLDOWNS[whatAbility];
+				}
+				else if(whatAbility == NINJA && table.players[pl].team == table.players[player].team) {
+					table.players[pl].invisibleTime = DEFAULT_INVISIBILITY_TIME;
 					table.players[player].cooldown = COOLDOWNS[whatAbility];
 				}
 			}
@@ -272,6 +279,7 @@ void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int w
 			table.players[i].speed = DEFAULT_SPEED[table.players[i].hasFlag][table.players[i].classType] - (table.players[i].slowTime != 0);
 			//printf("Player %d has speed: %d\n", i, table.players[i].speed);
 			table.players[i].cooldown = std::max(0, table.players[i].cooldown - 1);
+			table.players[i].invisibleTime = std::max(0, table.players[i].invisibleTime - 1);
 		}
 	}
 }
@@ -321,7 +329,7 @@ GameTable hidePlayers(GameTable table, int team){
 	for(int i = (1 - team) * 5; i < (2 - team) * 5; i++){
 		Coordinates pos = table.players[i].position;
 		int manh_dist = abs(pos.row - flag_home[team].row) + abs(pos.col - flag_home[team].col);
-		if(_VIEW_DISTANCE[pos.row][pos.col] == 0 && table.players[i].hasFlag == false && manh_dist > 13){
+		if((_VIEW_DISTANCE[pos.row][pos.col] == 0 || table.players[i].invisibleTime) && table.players[i].hasFlag == false && manh_dist > 13){
 			newTable.players[i].position = UNKNOWN_POSITION;
 		}
 	}

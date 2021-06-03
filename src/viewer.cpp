@@ -65,6 +65,8 @@ void drawArena (int gameState, GameTable *table)
 		writeText("Game outcome: BLUE wins!\n");
 	} else if (gameState == RED_WINS) {
 		writeText("Game outcome: RED wins!\n");
+	} else if (gameState == DRAW) {
+		writeText("Game outcome: DRAW!\n");
 	} else {
 		writeText("Game outcome: Unknown!\n");
 	}
@@ -95,18 +97,30 @@ void drawArena (int gameState, GameTable *table)
 				glColor3f(0.1f, 0.9f, 0.1f);
 			if(vc[0] == 1 && vc[1] == 0 && vc[2] == 1)
 				glColor3f(0.1f, 0.9f, 0.1f);
+			//
+			if(vc[0] == 0 && vc[1] == 1 && vc[2] == 0)
+				glColor3f(0.69f, 0.19f, 0.79f);
+			if(vc[0] == 1 && vc[1] == 1 && vc[2] == 0)
+				glColor3f(0.69f, 0.19f, 0.79f);
+			if(vc[0] == 0 && vc[1] == 1 && vc[2] == 1)
+				glColor3f(0.69f, 0.19f, 0.79f);
+			if(vc[0] == 1 && vc[1] == 1 && vc[2] == 1)
+				glColor3f(0.69f, 0.19f, 0.79f);
 			float x = 0 - 1.5f + (float)j*0.03f;
 			float y = 0 + 1.5f - (float)i*0.03f;
 			drawSquare(x, y, 0.03f);
 		}
 	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i)
 	{
+		float val = 1.0f;
+		if(table->players[i].invisibleTime)
+			val = 0.6f;
 		if(table->players[i].respawnTime > 0)
 			continue;
 		if(table->players[i].team == RED_TEAM)
-			glColor3f(0.9f, 0.0f, 0.0f);
+			glColor4f(0.9f, 0.0f, 0.0f, val);
 		else
-			glColor3f(0.0f, 0.0f, 0.9f);
+			glColor4f(0.0f, 0.0f, 0.9f, val);
 		int ii=table->players[i].position.row;
 		int jj=table->players[i].position.col;
 		float x = 0 - 1.5f + (float)jj*0.03f;
@@ -116,7 +130,12 @@ void drawArena (int gameState, GameTable *table)
 		drawRegPoly(x, y, 0.03f, 10);
 		if(table->players[i].classType == TANK)
 		{
-			glColor3f(0.0f, 0.8f, 0.0f);
+			glColor4f(0.0f, 0.8f, 0.0f, val);
+			drawRegPoly(x, y, 0.02f, 10);
+		}
+		if(table->players[i].classType == NINJA)
+		{
+			glColor4f(0.87f, 0.37f, 0.96f, val);
 			drawRegPoly(x, y, 0.02f, 10);
 		}
 	}
@@ -172,6 +191,8 @@ int mainLoop(int argc, char **argv) {
 	glutCreateWindow("Bombgame");
 	glutReshapeFunc(onWindowResize);
 	glutDisplayFunc(display);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glutIdleFunc(nextMove);
 	//glutMouseFunc(onMouseClick);
 	glutTimerFunc(1000, actualLoop, -1);
