@@ -181,7 +181,7 @@ int main(int argc, char** argv) {
 	pipes[0] = fopen(pipeFiles[0], "rb");
 	pipes[1] = fopen(pipeFiles[1], "wb");
 	int id = argv[1][20] - '0';
-	sendInitPlayer(pipes[1], PlayerInitMessage{ id%3 } );
+	sendInitPlayer(pipes[1], PlayerInitMessage{ (id%2)*2 } );
 	if(argv[3][0] == 'r'){
 		PlayRandom(pipes[0], pipes[1], argv[1][20]);
 	}

@@ -7,7 +7,7 @@
 
 int windowWidth;
 int windowHeight;
-int stillExploding[ROWS][COLUMNS];
+int stillSomething[3][ROWS][COLUMNS];
 const float PI = 4 * atan(1);
 
 void writeText(const char* string) {
@@ -73,48 +73,40 @@ void drawArena (int gameState, GameTable *table)
 	for(int i = 0; i < ROWS; ++i)
 		for(int j = 0; j < COLUMNS; ++j)
 		{
-			if(DEFAULT_MAP[i][j] == CELL_FREE && _DISTANCE[i][j] == 0 && stillExploding[i][j] == 0)
-			{
+			if(DEFAULT_MAP[i][j] != CELL_FREE)
+				continue;
+			int vc[3] = {0,0,0};
+			for(int k=0;k<=2;++k)
+				if(_DISTANCE[k][i][j])
+					stillSomething[k][i][j] = 1;
+			for(int k=0;k<=2;++k)
+				vc[k] = stillSomething[k][i][j];
+			for(int k=0;k<=2;++k)
+				if(!_DISTANCE[k][i][j])
+					stillSomething[k][i][j] = 0;
+					
+			// TODO: for Tudor find colors for all combinations 2^3 !
+			
+			if(vc[0] == 0 && vc[1] == 0 && vc[2] == 0)
 				glColor3f(0.8f, 0.8f, 0.8f);
-				float x = 0 - 1.5f + (float)j*0.03f;
-				float y = 0 + 1.5f - (float)i*0.03f;
-				drawSquare(x, y, 0.03f);
-			}
-			else if(DEFAULT_MAP[i][j] == CELL_FREE && _DISTANCE[i][j] == 0)
-			{
+			if(vc[0] == 1 && vc[1] == 0 && vc[2] == 0)
 				glColor3f(0.96f, 0.6f, 0.23f);
-				float x = 0 - 1.5f + (float)j*0.03f;
-				float y = 0 + 1.5f - (float)i*0.03f;
-				stillExploding[i][j] = 0;
-				drawSquare(x, y, 0.03f);
-			}
-			else if(DEFAULT_MAP[i][j] == CELL_FREE)
-			{
-				glColor3f(0.96f, 0.6f, 0.23f);
-				float x = 0 - 1.5f + (float)j*0.03f;
-				float y = 0 + 1.5f - (float)i*0.03f;
-				stillExploding[i][j] = 1;
-				drawSquare(x, y, 0.03f);
-			}
+			if(vc[0] == 0 && vc[1] == 0 && vc[2] == 1)
+				glColor3f(0.1f, 0.9f, 0.1f);
+			if(vc[0] == 1 && vc[1] == 0 && vc[2] == 1)
+				glColor3f(0.1f, 0.9f, 0.1f);
+			float x = 0 - 1.5f + (float)j*0.03f;
+			float y = 0 + 1.5f - (float)i*0.03f;
+			drawSquare(x, y, 0.03f);
 		}
 	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i)
 	{
 		if(table->players[i].respawnTime > 0)
 			continue;
 		if(table->players[i].team == RED_TEAM)
-		{
-			if(table->players[i].classType == TANK)
-				glColor3f(0.8f, 0.5f, 0.0f);
-			else
-				glColor3f(0.9f, 0.0f, 0.0f);
-		}
+			glColor3f(0.9f, 0.0f, 0.0f);
 		else
-		{
-			if(table->players[i].classType == TANK)
-				glColor3f(0.0f, 0.5f, 0.8f);
-			else
-				glColor3f(0.0f, 0.0f, 0.9f);
-		}
+			glColor3f(0.0f, 0.0f, 0.9f);
 		int ii=table->players[i].position.row;
 		int jj=table->players[i].position.col;
 		float x = 0 - 1.5f + (float)jj*0.03f;
@@ -122,6 +114,11 @@ void drawArena (int gameState, GameTable *table)
 		x+=0.015;
 		y-=0.015;
 		drawRegPoly(x, y, 0.03f, 10);
+		if(table->players[i].classType == TANK)
+		{
+			glColor3f(0.0f, 0.8f, 0.0f);
+			drawRegPoly(x, y, 0.02f, 10);
+		}
 	}
 	glColor3f(0.9f, 0.0f, 0.0f);
 	int ii=table->flags[0].position.row;
@@ -162,7 +159,7 @@ void onWindowResize(int w, int h) {
 int whatAction = 0;
 void actualLoop (int a)
 {
-	glutTimerFunc(30, actualLoop, -1);
+	glutTimerFunc(50, actualLoop, -1);
 	nextTick(whatAction);
 	glutPostRedisplay();//
 	whatAction++;

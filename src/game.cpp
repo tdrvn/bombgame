@@ -6,9 +6,10 @@
 #include <time.h>
 const int dr[5] = {0, -1, 0, 1, 0};
 const int dc[5] = {0, 0, -1, 0, 1};
-int _DISTANCE[ROWS][COLUMNS];
+int _DISTANCE[3][ROWS][COLUMNS];
 int DEFAULT_MAP[ROWS][COLUMNS];
 int DEFAULT_RESPAWN_TIME = 10;
+int DEFAULT_SLOW_TIME = 8;
 void getDefaultMap(){
 	
 	char readMap[ROWS][COLUMNS];
@@ -46,7 +47,7 @@ void initGameTable(GameTable &table){
 		else
 			table.players[i].team = BLUE_TEAM;
 		table.players[i].respawnTime = 0;
-		table.players[i].speed = DEFAULT_SPEED[table.players[i].classType];
+		table.players[i].speed = DEFAULT_SPEED[0][table.players[i].classType];
 		table.players[i].hp = DEFAULT_HP[table.players[i].classType];
 		table.players[i].position = spawns[table.players[i].team][rand() % NUMBER_OF_SPAWNS];
 	}
@@ -92,7 +93,6 @@ void interactWithFlag(GameTable &table, int player){
 
 		table.flags[enemyTeam].isAtPlayer = player;
 		table.players[player].hasFlag = true;
-		table.players[player].speed = SLOW_SPEED[table.players[player].classType];
 	}
 
 }
@@ -108,7 +108,6 @@ void killPlayer (GameTable &table, int player){
 		assert(table.flags[1 - currentTeam].position == table.players[player].position);
 	}
 	table.players[player].respawnTime = DEFAULT_RESPAWN_TIME;
-	table.players[player].speed = DEFAULT_SPEED[table.players[player].classType];
 	alive[player] = false;
 	
 	//maybe yes maybe no
@@ -124,25 +123,25 @@ void respawnPlayer (GameTable &table, int player){
 	table.players[player].hp = DEFAULT_HP[table.players[player].classType];
 	
 	assert(table.players[player].hasFlag == false);
-	assert(table.players[player].speed == DEFAULT_SPEED[table.players[player].classType]);
 	
 	interactWithFlag(table, player);
 }
 
 std::vector <Coordinates> allPos;
-void resetBoom ()
+void resetAbility ()
 {
 	for(Coordinates coord : allPos)
-		_DISTANCE[coord.row][coord.col] = 0;
+		for(int i=0;i<=2;++i)
+			_DISTANCE[i][coord.row][coord.col] = 0;
 	allPos.clear();
 }
 
-void makeBoom(GameTable &table, int player){
+void makeAbility(GameTable &table, int player, int whatAbility){
 	std::queue <Coordinates> q;
 	
 	q.push(table.players[player].position);
 	allPos.push_back(table.players[player].position);
-	_DISTANCE[table.players[player].position.row][table.players[player].position.col] = 1;
+	_DISTANCE[whatAbility][table.players[player].position.row][table.players[player].position.col] = 1;
 	
 	while(q.size()){
 		Coordinates cur = q.front();
@@ -152,19 +151,25 @@ void makeBoom(GameTable &table, int player){
 		q.pop();
 		for(int pl = 0; pl < NUMBER_OF_PLAYERS; pl++){
 			if(table.players[pl].position == cur){
-				if(table.players[pl].hp)
-					--table.players[pl].hp;
-				if(table.players[pl].hp == 0)
-					willDie[pl] = true;
+				if(whatAbility == BOMBER) {
+					if(table.players[pl].hp)
+						--table.players[pl].hp;
+					if(table.players[pl].hp == 0)
+						willDie[pl] = true;
+				}
+				else if(whatAbility == TANK && table.players[pl].team != table.players[player].team) {
+					table.players[pl].slowTime = DEFAULT_SLOW_TIME;
+					table.players[player].cooldown = COOLDOWNS[whatAbility];
+				}
 			}
 		}
-		if(_DISTANCE[cur.row][cur.col] == EXPLOSION_RADIUS)
+		if(_DISTANCE[whatAbility][cur.row][cur.col] == RADIUS[whatAbility])
 			continue;
 		for(int dir = 1; dir<=4; dir++){
 			Coordinates newcur(cur.row + dr[dir], cur.col + dc[dir]);
-			if(DEFAULT_MAP[newcur.row][newcur.col] == CELL_FREE && _DISTANCE[newcur.row][newcur.col] == 0 && _DISTANCE[cur.row][cur.col] < EXPLOSION_RADIUS){
+			if(DEFAULT_MAP[newcur.row][newcur.col] == CELL_FREE && _DISTANCE[whatAbility][newcur.row][newcur.col] == 0 && _DISTANCE[whatAbility][cur.row][cur.col] < RADIUS[whatAbility]){
 				q.push(newcur);
-				_DISTANCE[newcur.row][newcur.col] = 1 + _DISTANCE[cur.row][cur.col];
+				_DISTANCE[whatAbility][newcur.row][newcur.col] = 1 + _DISTANCE[whatAbility][cur.row][cur.col];
 			}
 		}
 	}
@@ -231,7 +236,7 @@ void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int w
 			willDie[i] = false;
 		}
 	}
-	resetBoom();
+	resetAbility();
 	// Doing the actual actions
 	int currentAction = whatAction;
 		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
@@ -239,13 +244,15 @@ void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int w
 				continue;
 			if(msg[i].actions[currentAction] != MOVE_ABILITY)
 				makeMove(table, i, msg[i].actions[currentAction]);
+			else if(table.players[i].cooldown)
+				makeMove(table, i, MOVE_STAY);
 		}
 		
 		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 			if(alive[i] == false || table.players[i].speed <= currentAction)
 				continue;
-			if(msg[i].actions[currentAction] == MOVE_ABILITY)
-				makeBoom(table, i);
+			if(msg[i].actions[currentAction] == MOVE_ABILITY && !table.players[i].cooldown)
+				makeAbility(table, i, table.players[i].classType);
 		}
 		
 		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
@@ -254,13 +261,17 @@ void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int w
 			willDie[i] = false;
 		}
 	
-	// Respawn players
+	// Respawn players / apply abilities
 	if(whatAction == MAX_SPEED - 1){
 		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
 			if(table.players[i].respawnTime != 0)
 				--table.players[i].respawnTime;
 			if(alive[i] == false && table.players[i].respawnTime == 0)
 				respawnPlayer(table, i);
+			table.players[i].slowTime = std::max(0, table.players[i].slowTime - 1);
+			table.players[i].speed = DEFAULT_SPEED[table.players[i].hasFlag][table.players[i].classType] - (table.players[i].slowTime != 0);
+			//printf("Player %d has speed: %d\n", i, table.players[i].speed);
+			table.players[i].cooldown = std::max(0, table.players[i].cooldown - 1);
 		}
 	}
 }

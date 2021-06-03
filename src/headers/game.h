@@ -28,9 +28,12 @@ const int TANK = 2;
 
 // not const since it might change over the course of the game
 extern int DEFAULT_RESPAWN_TIME; // TBD
+extern int DEFAULT_SLOW_TIME;
 
-const int EXPLOSION_RADIUS = 6; // TBD
+const int RADIUS[3] = {6, 4, 8};
 const int VIEW_RADIUS = 10;
+
+const int COOLDOWNS[3] = {0, 15, 10};
 
 //game states
 const int ERROR = 0;
@@ -47,8 +50,8 @@ const int MOVE_DOWN = 3;
 const int MOVE_RIGHT = 4;
 const int MOVE_ABILITY = 5;
 
-const int DEFAULT_SPEED[3] = {3, 4, 2};
-const int SLOW_SPEED[3] = {2, 3, 2};
+const int DEFAULT_SPEED[2][3] = {{3, 4, 2},
+								 {2, 3, 2}};
 const int MAX_SPEED = 4;
 
 const int DEFAULT_HP[3] = {1, 1, 2};
@@ -56,7 +59,7 @@ const int DEFAULT_HP[3] = {1, 1, 2};
 /* TODO: make it constant
 */
 extern int DEFAULT_MAP[ROWS][COLUMNS];
-extern int _DISTANCE[ROWS][COLUMNS];
+extern int _DISTANCE[3][ROWS][COLUMNS];
 const int CELL_FREE = 0;
 const int CELL_OCCUPIED = 1;
 
@@ -94,6 +97,8 @@ struct PlayerState{
 	Coordinates position;
 	int speed;
 	int respawnTime; // is alive if respawnTime = 0, in ticks
+	int slowTime; // is not slowed if slowTime = 0, in ticks
+	int cooldown;
 	
 	int hp;
 	int team;
