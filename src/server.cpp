@@ -31,6 +31,13 @@ GameTable nextTable;
 GameTable hiddenTable[2];
 
 void nextTick(int whatAction) {
+	if(currentTick >= MAX_TICKS){
+		gameState = DRAW;
+		table.gameState = DRAW;
+		nextTable.gameState = DRAW;
+		communicationEnded = true;
+		return;
+	}
 	//auto currentTime = Clock::now();
 	//int duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastRenderTime).count();
 	

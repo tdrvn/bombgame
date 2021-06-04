@@ -2,10 +2,10 @@ run: bin/player bin/server | pipes/playerToServer0 pipes/serverToPlayer0 pipes/p
 	bin/server pipes/playerToServer0 pipes/serverToPlayer0 pipes/playerToServer1 pipes/serverToPlayer1 pipes/playerToServer2 pipes/serverToPlayer2 pipes/playerToServer3 pipes/serverToPlayer3 pipes/playerToServer4 pipes/serverToPlayer4 pipes/playerToServer5 pipes/serverToPlayer5 pipes/playerToServer6 pipes/serverToPlayer6 pipes/playerToServer7 pipes/serverToPlayer7 pipes/playerToServer8 pipes/serverToPlayer8 pipes/playerToServer9 pipes/serverToPlayer9 & \
 	bin/player pipes/playerToServer0 pipes/serverToPlayer0 T & \
 	bin/player pipes/playerToServer1 pipes/serverToPlayer1 T & \
-	bin/player pipes/playerToServer2 pipes/serverToPlayer2 r & \
+	bin/player pipes/playerToServer2 pipes/serverToPlayer2 A & \
 	bin/player pipes/playerToServer3 pipes/serverToPlayer3 T & \
 	bin/player pipes/playerToServer4 pipes/serverToPlayer4 T & \
-	bin/player pipes/playerToServer5 pipes/serverToPlayer5 r & \
+	bin/player pipes/playerToServer5 pipes/serverToPlayer5 A & \
 	bin/player pipes/playerToServer6 pipes/serverToPlayer6 T & \
 	bin/player pipes/playerToServer7 pipes/serverToPlayer7 T & \
 	bin/player pipes/playerToServer8 pipes/serverToPlayer8 T & \

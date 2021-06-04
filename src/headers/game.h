@@ -34,7 +34,7 @@ extern int DEFAULT_INVISIBILITY_TIME;
 const int RADIUS[3] = {6, 4, 8};
 const int VIEW_RADIUS = 10;
 
-const int COOLDOWNS[3] = {0, 15, 10};
+const int COOLDOWNS[3] = {9, 15, 10};
 
 //game states
 const int ERROR = 0;

@@ -9,7 +9,7 @@ int windowWidth;
 int windowHeight;
 int stillSomething[3][ROWS][COLUMNS];
 const float PI = 4 * atan(1);
-
+int tickSpeed = 50;
 void writeText(const char* string) {
 	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)string);
 }
@@ -51,6 +51,17 @@ void drawLine(float x1, float y1, float x2, float y2) {
     glVertex2f(x2, y2);
 	glEnd();
 }
+void onKeyPress (int key, int x, int y)
+{
+    if(key == GLUT_KEY_UP)
+    {
+        tickSpeed = std::max(tickSpeed - 20, 30);
+    }
+    if(key == GLUT_KEY_DOWN)
+    {
+        tickSpeed = std::min(tickSpeed + 20, 410);
+    }
+}
 void drawArena (int gameState, GameTable *table)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -70,6 +81,18 @@ void drawArena (int gameState, GameTable *table)
 	} else {
 		writeText("Game outcome: Unknown!\n");
 	}
+	//printf("%d\n", currentTick);
+	glRasterPos2f(-2.0f, -1.9f);
+	char buffer[100] = {'\0'};
+	sprintf(buffer, "Action speed is %d", tickSpeed);
+	writeText(buffer);
+	
+	
+	glRasterPos2f(-0.1f, -1.9f);
+	sprintf(buffer, "Ticks left: %d", MAX_TICKS - currentTick);
+	writeText(buffer);
+	
+	
 	//printf("printing sth\n");
 	//drawEmptySquare(0.0f, 0.0f, 1.5f);
 	for(int i = 0; i < ROWS; ++i)
@@ -135,7 +158,8 @@ void drawArena (int gameState, GameTable *table)
 		}
 		if(table->players[i].classType == NINJA)
 		{
-			glColor4f(0.87f, 0.37f, 0.96f, val);
+			//glColor4f(0.87f, 0.37f, 0.96f, val);
+			glColor4f(0.0f, 0.0f, 0.0f, val);
 			drawRegPoly(x, y, 0.02f, 10);
 		}
 	}
@@ -178,7 +202,7 @@ void onWindowResize(int w, int h) {
 int whatAction = 0;
 void actualLoop (int a)
 {
-	glutTimerFunc(50, actualLoop, -1);
+	glutTimerFunc(tickSpeed, actualLoop, -1);
 	nextTick(whatAction);
 	glutPostRedisplay();//
 	whatAction++;
@@ -191,6 +215,7 @@ int mainLoop(int argc, char **argv) {
 	glutCreateWindow("Bombgame");
 	glutReshapeFunc(onWindowResize);
 	glutDisplayFunc(display);
+	glutSpecialFunc(onKeyPress);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glutIdleFunc(nextMove);
