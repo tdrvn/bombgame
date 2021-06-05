@@ -9,7 +9,7 @@ int windowWidth;
 int windowHeight;
 int stillSomething[3][ROWS][COLUMNS];
 const float PI = 4 * atan(1);
-int tickSpeed = 50;
+int tickSpeed = 70;
 void writeText(const char* string) {
 	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)string);
 }
@@ -211,7 +211,7 @@ void actualLoop (int a)
 int mainLoop(int argc, char **argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(900, 900);
 	glutCreateWindow("Bombgame");
 	glutReshapeFunc(onWindowResize);
 	glutDisplayFunc(display);
