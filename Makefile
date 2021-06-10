@@ -105,6 +105,6 @@ install:
 	sudo apt install freeglut3-dev
 
 openfiles: 
-	geany src/server.cpp & geany src/game.cpp & geany src/protocol.cpp & geany src/viewer.cpp & geany src/headers/game.h & geany src/headers/protocol.h & geany src/headers/viewer.h
+	geany src/server.cpp & geany src/game.cpp & geany src/protocol.cpp & geany src/viewer.cpp & geany src/headers/game.h & geany src/headers/protocol.h & geany src/headers/viewer.h & geany players/player.cpp
 	
 

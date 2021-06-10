@@ -173,6 +173,7 @@ void PlayAttack(FILE *readP, FILE *writeP){
 int main(int argc, char** argv) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	getDefaultMap();
+	printf("%d\n",DEFAULT_RESPAWN_TIME);
 	char* pipeFiles[2];
 	pipeFiles[1] = argv[1]; // first where the player writes, 2nd where the player reads
 	pipeFiles[0] = argv[2];
