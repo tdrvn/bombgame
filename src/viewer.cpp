@@ -150,7 +150,7 @@ void drawArena (int gameState, GameTable *table)
 		float y = 0 + 1.5f - (float)ii*0.03f;
 		x+=0.015;
 		y-=0.015;
-		drawRegPoly(x, y, 0.03f, 10);
+		drawRegPoly(x, y, 0.035f, 10);
 		if(table->players[i].classType == TANK)
 		{
 			glColor4f(0.0f, 0.8f, 0.0f, val);

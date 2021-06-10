@@ -140,6 +140,7 @@ void resetAbility ()
 }
 
 void makeAbility(GameTable &table, int player, int whatAbility){
+	table.players[player].cooldown = COOLDOWNS[whatAbility];
 	std::queue <Coordinates> q;
 	
 	q.push(table.players[player].position);
@@ -162,11 +163,9 @@ void makeAbility(GameTable &table, int player, int whatAbility){
 				}
 				else if(whatAbility == TANK && table.players[pl].team != table.players[player].team) {
 					table.players[pl].slowTime = DEFAULT_SLOW_TIME;
-					table.players[player].cooldown = COOLDOWNS[whatAbility];
 				}
 				else if(whatAbility == NINJA && table.players[pl].team == table.players[player].team) {
 					table.players[pl].invisibleTime = DEFAULT_INVISIBILITY_TIME;
-					table.players[player].cooldown = COOLDOWNS[whatAbility];
 				}
 			}
 		}
