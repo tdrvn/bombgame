@@ -171,9 +171,8 @@ void PlayAttack(FILE *readP, FILE *writeP){
 	
 }
 int main(int argc, char** argv) {
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	getDefaultMap();
-	printf("%d\n",DEFAULT_RESPAWN_TIME);
 	char* pipeFiles[2];
 	pipeFiles[1] = argv[1]; // first where the player writes, 2nd where the player reads
 	pipeFiles[0] = argv[2];
@@ -181,7 +180,12 @@ int main(int argc, char** argv) {
 	pipes[0] = fopen(pipeFiles[0], "rb");
 	pipes[1] = fopen(pipeFiles[1], "wb");
 	int id = argv[1][20] - '0';
+	ServerMessage class_table;
+	receiveGameState(pipes[0], &class_table);
+	
+	
 	sendInitPlayer(pipes[1], PlayerInitMessage{ id % 3 } );
+	
 	if(argv[3][0] == 'r'){
 		PlayRandom(pipes[0], pipes[1], argv[1][20]);
 	}

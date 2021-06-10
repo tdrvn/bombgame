@@ -20,7 +20,7 @@ const int BLUE_TEAM = 1;
 const int TEAMS[2] = {RED_TEAM, BLUE_TEAM};
 
 //PLAYER CLASSES CONSTANTS
-
+const int UNKNOWN_CLASS = -1;
 const int BOMBER = 0;
 const int NINJA = 1;
 const int TANK = 2;
@@ -125,6 +125,8 @@ struct GameTable{
 struct PlayerMessage {
 	int actions[MAX_SPEED];
 	PlayerMessage( std::initializer_list<int> listActions){
+		for(int i = 0; i < MAX_SPEED; i++)
+			actions[i] = MOVE_STAY;
 		int cnt = 0;
 		for(int e:listActions){
 			actions[cnt] = e;

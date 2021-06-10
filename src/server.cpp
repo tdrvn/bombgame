@@ -122,7 +122,7 @@ void *playerCommunication(void* arg) {
 
 
 int main(int argc, char** argv) {
-
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	assert(pthread_mutex_init(&gameLock, NULL) == 0);
 	pthread_t threads[NUMBER_OF_PLAYERS];
 	ThreadArgs threadArgs[NUMBER_OF_PLAYERS];
@@ -133,15 +133,29 @@ int main(int argc, char** argv) {
 		threadArgs[i].playerID =  i;
 	}
 	
-	
-	for(int i = 0; i < NUMBER_OF_PLAYERS; i++){
-		printf("Waiting for initial message from player %d\n", i);
-		PlayerInitMessage m;
+	for(int i = 0; i < NUMBER_OF_PLAYERS; i++)
+		table.players[i].classType = UNKNOWN_CLASS;
+	for(int i = 0; i < NUMBER_OF_PLAYERS/NUMBER_OF_TEAMS; i++){
+		int newClass[2];
+		for(int j = 0; j <=1 ; j++){
+			
+			PlayerInitMessage m;
+			printf("Waiting for initial message from player %d\n", i + j * 5);
+			sendGameState(threadArgs[i +  j * 5].pipes[0], ServerMessage{table, i + j * 5});
+			
+			receiveInitPlayer( threadArgs[i + j * 5].pipes[1] , &m);
+			
+			newClass[j] = m.type;
+			
+		}
 		
-		receiveInitPlayer( threadArgs[i].pipes[1] , &m);
-		
-		table.players[i].classType = m.type;
+		table.players[i].classType = newClass[0];
 		printf("Player %d is of class %d\n", i, table.players[i].classType);
+		
+		table.players[i + 5].classType = newClass[1];
+		printf("Player %d is of class %d\n", i + 5, table.players[i + 5].classType);
+		
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	}
 	
 	gameState = PLAYING;
