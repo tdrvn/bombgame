@@ -105,18 +105,18 @@ struct PlayerState{
 ```
 struct FlagState{
 	Coordinates position; // pozitia steagului
-    \
+    
 	int isAtPlayer; // numarul playerului care are steagul, in cazul in care steagul nu este la niciun player, aceasta are valorile de mai jos:
 };
 ```
-- const int AT_HOME = -1;_
-- const int ON_GROUND = -2;_
+- const int AT\_HOME = -1;_
+- const int ON\_GROUND = -2;_
 
 **Structura GameTable:**
 ```
 struct GameTable{
-	PlayerState players\[NUMBER_OF_PLAYERS]; // playerii 0-4 sunt in prima echipa (RED\_TEAM) iar playerii 5-9 sunt in a doua echipa (BLUE_TEAM)
-	FlagState flags\[NUMBER_OF_TEAMS];
+	PlayerState players[NUMBER_OF_PLAYERS]; // playerii 0-4 sunt in prima echipa (RED\_TEAM) iar playerii 5-9 sunt in a doua echipa (BLUE_TEAM)
+	FlagState flags[NUMBER_OF_TEAMS];
 	int gameState;
 };
 ```
@@ -130,7 +130,7 @@ struct ServerMessage {
 **Structura PlayerMessage:**
 ```
 struct PlayerMessage {
-	int actions\[MAX_SPEED];
+	int actions[MAX_SPEED];
 };
 ```
 **Structura PlayerInitMessage:**
