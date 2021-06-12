@@ -24,4 +24,4 @@ void receiveGameState(FILE *pipe, ServerMessage *m);
 
 
 void receiveInitPlayer(FILE *pipe, PlayerInitMessage *m);
-int sendInitPlayer(FILE *pipe, PlayerInitMessage m);
+void sendInitPlayer(FILE *pipe, PlayerInitMessage m);

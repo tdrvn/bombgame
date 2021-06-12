@@ -44,14 +44,17 @@ void receiveGameState(FILE *pipe, ServerMessage *m) {
 }
 
 
-int sendInitPlayer(FILE *pipe, PlayerInitMessage m) {
+void sendInitPlayer(FILE *pipe, PlayerInitMessage m) {
 
   sigpipeReceived = 0;
   signal(SIGPIPE, sigpipeHandler);
- 
+
   fwrite(&m, sizeof(PlayerInitMessage), 1, pipe);
   fflush(pipe);
-  return sigpipeReceived;
+  if (sigpipeReceived) {
+    fprintf(stderr, "Server failure - sendMove!!!\n");
+    exit(0);
+  }
 }
 
 void receiveInitPlayer(FILE *pipe, PlayerInitMessage *m){

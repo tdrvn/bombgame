@@ -145,6 +145,22 @@ La inceput, fiecare player trebuie sa citeasca un ServerMessage, in care va vede
 Initial, playerii 0 si 5 vor trimite ce clasa isi aleg, fara a sti clasele celorlalti playeri, 
 Apoi playerii 1 si 6 vor trimite ce clasa aleg, stiind clasele alese de playerii 0 si 5, 
 etc..
+---
 
-*TODO: functiile din protocol*
 
+
+Functii protocol
+===
+
+Playerii vor folosi urmatoarele functii pentru a primi si trimite mesaje de la server:
+
+```
+void sendMove(FILE *pipe, PlayerMessage m); // pentru a trimite mesajul, va fi folosit pipe-ul de scriere, o data pe tick
+
+void receiveGameState(FILE *pipe, ServerMessage *m);// pentru a primi mesajul de la server, va fi folosit pipe-ul de citire, acesta va fi trimis o data pe tick
+
+void sendInitPlayer(FILE *pipe, PlayerInitMessage m);// pentru mesajul initial de alegerea clasei, va fi folosit pipe-ul de scriere
+```
+Pipe-urile vor fi date ca argumente playerilor.
+** argv[1] - pipe-ul de scriere **
+** argv[2] - pipe-ul de citire **

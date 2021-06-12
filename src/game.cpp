@@ -232,15 +232,13 @@ void makeMove (GameTable &table, int player, int moveType){
 void makeMovesTick(GameTable &table, PlayerMessage msg[NUMBER_OF_PLAYERS], int whatAction){
 	
 	// Determine what players are alive
-	if(whatAction == 0){
-		for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
-			if(table.players[i].respawnTime != 0){
-				alive[i] = false;
-			}
-			else
-				alive[i] = true;
-			willDie[i] = false;
+	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i){
+		if(table.players[i].respawnTime != 0){
+			alive[i] = false;
 		}
+		else
+			alive[i] = true;
+		willDie[i] = false;
 	}
 	resetAbility();
 	// Doing the actual actions
