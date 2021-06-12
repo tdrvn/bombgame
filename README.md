@@ -18,12 +18,12 @@ Fiecare gameTick este impartit in 4 actiuni, iar fiecare player poate alege ce s
 Spre exemplu, daca un player are viteza 2 iar alt player are viteza 3, primul player va putea alege ce actiunea doar pentru primele doua actiuni, iar pentru celelalte va fi fortat sa stea pe loc, in timp ce playerul cu viteza 3 va alege primele 3 actiuni si va sta pe loc ca ultima actiune.
 Actiunile sunt de 6 tipuri:
 
-*const int MOVE_STAY = 0;*
-*const int MOVE_UP = 1;*
-*const int MOVE_LEFT = 2;*
-*const int MOVE_DOWN = 3;*
-*const int MOVE_RIGHT = 4;*
-*const int MOVE_ABILITY = 5;*
+- const int MOVE_STAY = 0;
+- const int MOVE_UP = 1;
+- const int MOVE_LEFT = 2;
+- const int MOVE_DOWN = 3;
+- const int MOVE_RIGHT = 4;
+- const int MOVE_ABILITY = 5;
 
 primele 5 reprezentand miscarea playerului, iar ultima actiune reprezentand utilizarea abilitatii.
 Pentru un player cu viteza diferita de 4, ultimele actiuni ramase vor fi automat egale cu MOVE_STAY;
@@ -109,8 +109,8 @@ struct FlagState{
 	int isAtPlayer; // numarul playerului care are steagul, in cazul in care steagul nu este la niciun player, aceasta are valorile de mai jos:
 };
 ```
-_const int AT_HOME = -1;_
-_const int ON_GROUND = -2;_
+- const int AT_HOME = -1;_
+- const int ON_GROUND = -2;_
 
 **Structura GameTable:**
 ```
