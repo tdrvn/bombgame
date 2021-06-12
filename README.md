@@ -76,7 +76,7 @@ Protocol (kinda)
 **Structura Coordinates:**
 ```
 struct Coordinates{
-	int row, col;
+    int row, col;
 };
 ```
 In plus, are si operator de == si !=
@@ -85,13 +85,13 @@ In plus, are si operator de == si !=
 
 ```
 struct PlayerState{
-	Coordinates position; // pozitia playerului
-	int speed; // viteza playerului
-	int respawnTime; // este in viata daca respawnTime = 0, altfel, se va respawna peste respawnTime tick-uri
-	int slowTime; // nu este incetinit daca slowTime = 0, altfel, incetinirea va trece peste slowTime tick-uri
-	int invisibleTime; // este vizibil daca invisibleTime = 0, altfel, invizibilitatea va trece peste invisibleTime tick-uri
+    Coordinates position; // pozitia playerului
+    int speed; // viteza playerului
+    int respawnTime; // este in viata daca respawnTime = 0, altfel, se va respawna peste respawnTime tick-uri
+    int slowTime; // nu este incetinit daca slowTime = 0, altfel, incetinirea va trece peste slowTime tick-uri
+    int invisibleTime; // este vizibil daca invisibleTime = 0, altfel, invizibilitatea va trece peste invisibleTime tick-uri
     int cooldown; // numarul de tick-uri ramase pana cand playerul isi poate folosi abilitatea
-	   
+    
     int hp; // HP-ul ramas al playerului
     int team; // echipa playerului
     bool hasFlag; // este true daca playerul are steagul inamic
@@ -104,9 +104,9 @@ struct PlayerState{
 
 ```
 struct FlagState{
-	Coordinates position; // pozitia steagului
+    Coordinates position; // pozitia steagului
     
-	int isAtPlayer; // numarul playerului care are steagul, in cazul in care steagul nu este la niciun player, aceasta are valorile de mai jos:
+    int isAtPlayer; // numarul playerului care are steagul, in cazul in care steagul nu este la niciun player, aceasta are valorile de mai jos:
 };
 ```
 - const int AT\_HOME = -1;_
@@ -115,29 +115,29 @@ struct FlagState{
 **Structura GameTable:**
 ```
 struct GameTable{
-	PlayerState players[NUMBER_OF_PLAYERS]; // playerii 0-4 sunt in prima echipa (RED\_TEAM) iar playerii 5-9 sunt in a doua echipa (BLUE_TEAM)
-	FlagState flags[NUMBER_OF_TEAMS];
-	int gameState;
+    PlayerState players[NUMBER_OF_PLAYERS]; // playerii 0-4 sunt in prima echipa (RED\_TEAM) iar playerii 5-9 sunt in a doua echipa (BLUE_TEAM)
+    FlagState flags[NUMBER_OF_TEAMS];
+    int gameState;
 };
 ```
 **Structura ServerMessage:**
 ```
 struct ServerMessage {
-	GameTable table;
-	int currentPlayer; // playerul la mutare
+    GameTable table;
+    int currentPlayer; // playerul la mutare
 };
 ```
 **Structura PlayerMessage:**
 ```
 struct PlayerMessage {
-	int actions[MAX_SPEED];
+    int actions[MAX_SPEED];
 };
 ```
 **Structura PlayerInitMessage:**
 (trimisa de playeri la inceput pentru a isi alege clasa)
 ```
 struct PlayerInitMessage{
-	int type; // reprezinta clasa
+    int type; // reprezinta clasa
 };
 ```
 ---
