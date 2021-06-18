@@ -186,13 +186,10 @@ int main(int argc, char** argv) {
 	
 	sendInitPlayer(pipes[1], PlayerInitMessage{ id % 3 } );
 	
-	if(argv[3][0] == 'r'){
-		PlayRandom(pipes[0], pipes[1], argv[1][20]);
-	}
-	else if(argv[3][0] == 'A'){
+	if(id==2 || id==5){
 		PlayAttack(pipes[0], pipes[1]);
 	}
-	else if(argv[3][0] == 'T'){
+	else {
 		srand(id * time(0));
 		PlayTarget(pipes[0], pipes[1]);
 	}

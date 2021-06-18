@@ -14,6 +14,7 @@ auto lastRenderTime = Clock::now();
 char* pipeFiles[NUMBER_OF_PLAYERS][2];
 FILE *pipes[NUMBER_OF_PLAYERS][2];
 
+std::string TeamNames[2];
 int gameState;
 GameTable table;
 bool communicationEnded;
@@ -132,6 +133,9 @@ int main(int argc, char** argv) {
 		threadArgs[i].pipes[1] = fopen( argv[2*i + 1], "rb");
 		threadArgs[i].playerID =  i;
 	}
+	
+	TeamNames[0]=argv[2*NUMBER_OF_PLAYERS + 1];
+	TeamNames[1]=argv[2*NUMBER_OF_PLAYERS + 2];
 	
 	for(int i = 0; i < NUMBER_OF_PLAYERS; i++)
 		table.players[i].classType = UNKNOWN_CLASS;

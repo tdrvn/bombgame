@@ -68,22 +68,48 @@ void drawArena (int gameState, GameTable *table)
 	glLoadIdentity();
 	glColor3f(0.8f, 0.8f, 0.8f);
 	glRasterPos2f(-2.0f, 2.0f);
-	
 	writeText("\n");
 	if (gameState == PLAYING) {
-		writeText("Still playing!\n");
+		std::string aux="\n";
+		writeText("Still playing!         ");
+		glColor3f(0.9f, 0.0f, 0.0f);
+		glRasterPos2f(-2.0f, 2.0f);
+		aux+=     "                                   ";
+		
+		writeText((aux+TeamNames[0]).c_str());
+		glColor3f(0.8f, 0.8f, 0.8f);
+		glRasterPos2f(-2.0f, 2.0f);
+		for(int i=0;i<3*TeamNames[0].size();++i)
+			aux+=' ';
+		
+		writeText((aux+" VS ").c_str());
+		glColor3f(0.0f, 0.0f, 0.9f);
+		glRasterPos2f(-2.0f, 2.0f);
+		aux+=          "         ";
+		writeText((aux+TeamNames[1]).c_str());
+		glColor3f(0.8f, 0.8f, 0.8f);
 	} else if (gameState == BLUE_WINS) {
-		writeText("Game outcome: BLUE wins!\n");
+		glColor3f(0.0f, 0.0f, 0.9f);
+		glRasterPos2f(-2.0f, 2.0f);
+		writeText("\n");
+		std::string aux="Game outcome: " + TeamNames[1] + " wins!\n";
+		writeText(aux.c_str());
+		glColor3f(0.8f, 0.8f, 0.8f);
 	} else if (gameState == RED_WINS) {
-		writeText("Game outcome: RED wins!\n");
+		glColor3f(0.9f, 0.0f, 0.0f);
+		glRasterPos2f(-2.0f, 2.0f);
+		writeText("\n");
+		std::string aux="Game outcome: " + TeamNames[0] + " wins!\n";
+		writeText(aux.c_str());
+		glColor3f(0.8f, 0.8f, 0.8f);
 	} else if (gameState == DRAW) {
 		writeText("Game outcome: DRAW!\n");
 	} else {
 		writeText("Game outcome: Unknown!\n");
 	}
 	//printf("%d\n", currentTick);
-	glRasterPos2f(-2.0f, -1.9f);
 	char buffer[100] = {'\0'};
+	glRasterPos2f(-2.0f, -1.9f);
 	sprintf(buffer, "Action speed is %d", tickSpeed);
 	writeText(buffer);
 	
@@ -129,9 +155,9 @@ void drawArena (int gameState, GameTable *table)
 				glColor3f(0.69f, 0.19f, 0.79f);
 			if(vc[0] == 1 && vc[1] == 1 && vc[2] == 1)
 				glColor3f(0.69f, 0.19f, 0.79f);
-			float x = 0 - 1.5f + (float)j*0.03f;
-			float y = 0 + 1.5f - (float)i*0.03f;
-			drawSquare(x, y, 0.03f);
+			float x = 0 - 1.7f + (float)j*0.034f;
+			float y = 0 + 1.7f - (float)i*0.034f;
+			drawSquare(x, y, 0.034f);
 		}
 	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i)
 	{
@@ -146,40 +172,40 @@ void drawArena (int gameState, GameTable *table)
 			glColor4f(0.0f, 0.0f, 0.9f, val);
 		int ii=table->players[i].position.row;
 		int jj=table->players[i].position.col;
-		float x = 0 - 1.5f + (float)jj*0.03f;
-		float y = 0 + 1.5f - (float)ii*0.03f;
-		x+=0.015;
-		y-=0.015;
-		drawRegPoly(x, y, 0.035f, 10);
+		float x = 0 - 1.7f + (float)jj*0.034f;
+		float y = 0 + 1.7f - (float)ii*0.034f;
+		x+=0.017;
+		y-=0.017;
+		drawRegPoly(x, y, 0.038f, 10);
 		if(table->players[i].classType == TANK)
 		{
 			glColor4f(0.0f, 0.8f, 0.0f, val);
-			drawRegPoly(x, y, 0.02f, 10);
+			drawRegPoly(x, y, 0.022f, 10);
 		}
 		if(table->players[i].classType == NINJA)
 		{
 			//glColor4f(0.87f, 0.37f, 0.96f, val);
 			glColor4f(0.0f, 0.0f, 0.0f, val);
-			drawRegPoly(x, y, 0.02f, 10);
+			drawRegPoly(x, y, 0.022f, 10);
 		}
 	}
 	glColor3f(0.9f, 0.0f, 0.0f);
 	int ii=table->flags[0].position.row;
 	int jj=table->flags[0].position.col;
-	float x = 0 - 1.5f + (float)jj*0.03f;
-	float y = 0 + 1.5f - (float)ii*0.03f;
-	x+=0.015;
-	y-=0.015;
-	drawRegPoly(x, y, 0.03f, 3);
+	float x = 0 - 1.7f + (float)jj*0.034f;
+	float y = 0 + 1.7f - (float)ii*0.034f;
+	x+=0.017;
+	y-=0.017;
+	drawRegPoly(x, y, 0.034f, 3);
 	
 	glColor3f(0.0f, 0.0f, 0.9f);
 	ii=table->flags[1].position.row;
 	jj=table->flags[1].position.col;
-	x = 0 - 1.5f + (float)jj*0.03f;
-	y = 0 + 1.5f - (float)ii*0.03f;
-	x+=0.015;
-	y-=0.015;
-	drawRegPoly(x, y, 0.03f, 3);
+	x = 0 - 1.7f + (float)jj*0.034f;
+	y = 0 + 1.7f - (float)ii*0.034f;
+	x+=0.017;
+	y-=0.017;
+	drawRegPoly(x, y, 0.034f, 3);
     glFlush();
 	glutSwapBuffers();
 }
