@@ -109,12 +109,12 @@ void drawArena (int gameState, GameTable *table)
 	}
 	//printf("%d\n", currentTick);
 	char buffer[100] = {'\0'};
-	glRasterPos2f(-2.0f, -1.9f);
+	glRasterPos2f(-2.0f, -1.93f);
 	sprintf(buffer, "Action speed is %d", tickSpeed);
 	writeText(buffer);
 	
 	
-	glRasterPos2f(-0.1f, -1.9f);
+	glRasterPos2f(-0.1f, -1.93f);
 	sprintf(buffer, "Ticks left: %d", MAX_TICKS - currentTick);
 	writeText(buffer);
 	
@@ -155,9 +155,9 @@ void drawArena (int gameState, GameTable *table)
 				glColor3f(0.69f, 0.19f, 0.79f);
 			if(vc[0] == 1 && vc[1] == 1 && vc[2] == 1)
 				glColor3f(0.69f, 0.19f, 0.79f);
-			float x = 0 - 1.7f + (float)j*0.034f;
-			float y = 0 + 1.7f - (float)i*0.034f;
-			drawSquare(x, y, 0.034f);
+			float x = 0 - 1.9f + (float)j*0.038f;
+			float y = 0 + 1.9f - (float)i*0.038f;
+			drawSquare(x, y, 0.038f);
 		}
 	for(int i = 0; i < NUMBER_OF_PLAYERS; ++i)
 	{
@@ -172,40 +172,40 @@ void drawArena (int gameState, GameTable *table)
 			glColor4f(0.0f, 0.0f, 0.9f, val);
 		int ii=table->players[i].position.row;
 		int jj=table->players[i].position.col;
-		float x = 0 - 1.7f + (float)jj*0.034f;
-		float y = 0 + 1.7f - (float)ii*0.034f;
-		x+=0.017;
-		y-=0.017;
-		drawRegPoly(x, y, 0.038f, 10);
+		float x = 0 - 1.9f + (float)jj*0.038f;
+		float y = 0 + 1.9f - (float)ii*0.038f;
+		x+=0.019;
+		y-=0.019;
+		drawRegPoly(x, y, 0.042f, 10);
 		if(table->players[i].classType == TANK)
 		{
 			glColor4f(0.0f, 0.8f, 0.0f, val);
-			drawRegPoly(x, y, 0.022f, 10);
+			drawRegPoly(x, y, 0.024f, 10);
 		}
 		if(table->players[i].classType == NINJA)
 		{
 			//glColor4f(0.87f, 0.37f, 0.96f, val);
 			glColor4f(0.0f, 0.0f, 0.0f, val);
-			drawRegPoly(x, y, 0.022f, 10);
+			drawRegPoly(x, y, 0.024f, 10);
 		}
 	}
 	glColor3f(0.9f, 0.0f, 0.0f);
 	int ii=table->flags[0].position.row;
 	int jj=table->flags[0].position.col;
-	float x = 0 - 1.7f + (float)jj*0.034f;
-	float y = 0 + 1.7f - (float)ii*0.034f;
-	x+=0.017;
-	y-=0.017;
-	drawRegPoly(x, y, 0.034f, 3);
+	float x = 0 - 1.9f + (float)jj*0.038f;
+	float y = 0 + 1.9f - (float)ii*0.038f;
+	x+=0.019;
+	y-=0.019;
+	drawRegPoly(x, y, 0.038f, 3);
 	
 	glColor3f(0.0f, 0.0f, 0.9f);
 	ii=table->flags[1].position.row;
 	jj=table->flags[1].position.col;
-	x = 0 - 1.7f + (float)jj*0.034f;
-	y = 0 + 1.7f - (float)ii*0.034f;
-	x+=0.017;
-	y-=0.017;
-	drawRegPoly(x, y, 0.034f, 3);
+	x = 0 - 1.9f + (float)jj*0.038f;
+	y = 0 + 1.9f - (float)ii*0.038f;
+	x+=0.019;
+	y-=0.019;
+	drawRegPoly(x, y, 0.038f, 3);
     glFlush();
 	glutSwapBuffers();
 }
