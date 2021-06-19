@@ -1,6 +1,15 @@
 BOMBGAME	
 ===========
 
+Patch Notes
+=======
+
+19 iun:
+- Raza true vision-ului in jurul bazei scazuta de la 13 la 6 (distanta manhattan)
+- Respawn time-ul creste cu 1 odata la 100 de tick-uri
+- cateva modificari la makefile pentru a fi mai usor de testat un player
+
+
 Comenzi
 =======
 1. Pentru rularea programului, comanda "make" sau "make run"
@@ -27,12 +36,16 @@ Actiunile sunt de 6 tipuri:
 
 primele 5 reprezentand miscarea playerului, iar ultima actiune reprezentand utilizarea abilitatii.
 Pentru un player cu viteza diferita de 4, ultimele actiuni ramase vor fi automat egale cu MOVE_STAY;
+
 Abilitatiile au cooldown, in functie de clasa, daca un player incearca sa isi foloseasca abilitatea cand aceasta este pe cooldown, actiunea respectiva va fi inlocuita de MOVE_STAY.
+
 Inainte de fiecare tick, playerii vor trimite ce actiuni vor sa faca in tick-ul respectiv, iar acestea se vor efectua in acelasi timp incepand cu prima actiune, apoi a doua, etc. In timpul unei actiuni, intai se fac mutarile, apoi abilitatile.
+
+Atunci cand un player moare, acesta se va respawna dupa DEFAULT_RESPAWN_TIME tick-uri, care este initial egal cu 10 tick-uri si creste cu cate un tick dupa fiecare 100 de tick-uri.
 
 Un pozitia unui player este cunoscuta de echipa inamica daca si numai daca cel putin una din urmatoarele conditii este valida:
 1. playerul are steagul inamic.
-2. playerul se afla la distanta cel mult 13 de baza steagului inamic.
+2. playerul se afla la distanta cel mult 6 de baza steagului inamic.
 3. playerul nu este invizibil si se afla la distanta cel mult 10 de un player inamic.
 
 In functie de clasa aleasa, playerii au diferite viteze si abilitati.
@@ -45,6 +58,7 @@ Clase
 - HP: 1
 
 Abilitate: explodeaza pe o raza egala cu 6, si scade 1 din viata tuturor playerilor din aceasta raza (inclusiv el si alti aliati)
+
 Cooldown: 9 tick-uri
 
 Nota: Deoarece aceasta abilitate omoara playerul respectiv, aceasta nu are nevoie de cooldown, acesta e just in case.
@@ -55,6 +69,7 @@ Nota: Deoarece aceasta abilitate omoara playerul respectiv, aceasta nu are nevoi
 - HP: 1
 
 Abilitate: pe o raza egala cu 4, face toti aliatii (el inclusiv) invizibili pentru urmatoarele 5 tick-uri.
+
 Cooldown: 15 tick-uri
 
 **3. Tank**
@@ -63,6 +78,7 @@ Cooldown: 15 tick-uri
 - HP: 2
 
 Abilitate: pe o raza egala cu 8, scade 1 din viteza tuturor inamicilor (aceasta scadere nu se stackeaza) pentru urmatoarele 8 tick-uri
+
 Cooldown: 10 tick-uri
 
 
@@ -109,8 +125,8 @@ struct FlagState{
     int isAtPlayer; // numarul playerului care are steagul, in cazul in care steagul nu este la niciun player, aceasta are valorile de mai jos:
 };
 ```
-- const int AT\_HOME = -1;_
-- const int ON\_GROUND = -2;_
+- const int AT_HOME = -1;
+- const int ON_GROUND = -2;
 
 **Structura GameTable:**
 ```
@@ -145,6 +161,7 @@ La inceput, fiecare player trebuie sa citeasca un ServerMessage, in care va vede
 Initial, playerii 0 si 5 vor trimite ce clasa isi aleg, fara a sti clasele celorlalti playeri, 
 Apoi playerii 1 si 6 vor trimite ce clasa aleg, stiind clasele alese de playerii 0 si 5, 
 etc..
+
 ---
 
 
@@ -162,5 +179,5 @@ void receiveGameState(FILE *pipe, ServerMessage *m);// pentru a primi mesajul de
 void sendInitPlayer(FILE *pipe, PlayerInitMessage m);// pentru mesajul initial de alegerea clasei, va fi folosit pipe-ul de scriere
 ```
 Pipe-urile vor fi date ca argumente playerilor.
-** argv[1] - pipe-ul de scriere **
-** argv[2] - pipe-ul de citire **
+**argv[1] - pipe-ul de scriere**
+**argv[2] - pipe-ul de citire**

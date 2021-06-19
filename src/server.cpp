@@ -58,6 +58,8 @@ void nextTick(int whatAction) {
 			hiddenTable[0] = hidePlayers(nextTable, 0);
 			hiddenTable[1] = hidePlayers(nextTable, 1);
 			currentTick++;
+			if(currentTick % 100 == 0)
+				++DEFAULT_RESPAWN_TIME;
 		}
 		makeMovesTick(table, oldPlayerMessages, whatAction);
 		if(whatAction == MAX_SPEED - 1)

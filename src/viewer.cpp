@@ -110,7 +110,7 @@ void drawArena (int gameState, GameTable *table)
 	//printf("%d\n", currentTick);
 	char buffer[100] = {'\0'};
 	glRasterPos2f(-2.0f, -1.93f);
-	sprintf(buffer, "Action speed is %d", tickSpeed);
+	sprintf(buffer, "Action speed is %d and respawn time is %d", tickSpeed, DEFAULT_RESPAWN_TIME);
 	writeText(buffer);
 	
 	

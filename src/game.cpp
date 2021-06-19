@@ -326,7 +326,7 @@ GameTable hidePlayers(GameTable table, int team){
 	for(int i = (1 - team) * 5; i < (2 - team) * 5; i++){
 		Coordinates pos = table.players[i].position;
 		int manh_dist = abs(pos.row - flag_home[team].row) + abs(pos.col - flag_home[team].col);
-		if((_VIEW_DISTANCE[pos.row][pos.col] == 0 || table.players[i].invisibleTime) && table.players[i].hasFlag == false && manh_dist > 13){
+		if((_VIEW_DISTANCE[pos.row][pos.col] == 0 || table.players[i].invisibleTime) && table.players[i].hasFlag == false && manh_dist > 6){
 			newTable.players[i].position = UNKNOWN_POSITION;
 		}
 	}
