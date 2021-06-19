@@ -179,9 +179,9 @@ int main(int argc, char** argv) {
 	FILE *pipes[2];
 	pipes[0] = fopen(pipeFiles[0], "rb");
 	pipes[1] = fopen(pipeFiles[1], "wb");
-	int id = argv[1][20] - '0';
 	ServerMessage class_table;
 	receiveGameState(pipes[0], &class_table);
+	int id = class_table.currentPlayer;
 	
 	
 	sendInitPlayer(pipes[1], PlayerInitMessage{ id % 3 } );
