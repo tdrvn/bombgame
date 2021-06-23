@@ -82,13 +82,13 @@ struct Coordinates{
 
 const int NUMBER_OF_SPAWNS = 2;
 //spawn positions! 
-const Coordinates spawns[NUMBER_OF_TEAMS][NUMBER_OF_SPAWNS] ={ {(Coordinates){17, 70}, (Coordinates){28, 81} },
-											    {				(Coordinates){82, 30}, (Coordinates){72, 19} }  
+const Coordinates spawns[NUMBER_OF_TEAMS][NUMBER_OF_SPAWNS] ={ {Coordinates{17, 70}, Coordinates{28, 81} },
+											    {				Coordinates{82, 30}, Coordinates{72, 19} }  
 											  };
 const Coordinates UNKNOWN_POSITION = {-1, -1};
 //flag home positions
-const Coordinates flag_home[NUMBER_OF_TEAMS] = {(Coordinates){12, 87},
-											    (Coordinates){87, 12}};
+const Coordinates flag_home[NUMBER_OF_TEAMS] = {Coordinates{12, 87},
+											    Coordinates{87, 12}};
 											    
 //flag constants
 const int AT_HOME = -1;
