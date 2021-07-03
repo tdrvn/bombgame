@@ -122,7 +122,7 @@ void *playerCommunication(void* arg) {
 }
 
 
-
+std::string _classes[3]={"BOMBER","NINJA","TANK"};
 
 int main(int argc, char** argv) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -156,12 +156,12 @@ int main(int argc, char** argv) {
 		}
 		
 		table.players[i].classType = newClass[0];
-		printf("Player %d is of class %d\n", i, table.players[i].classType);
+		printf("Player %d is a %s\n", i, _classes[table.players[i].classType].c_str());
 		
 		table.players[i + 5].classType = newClass[1];
-		printf("Player %d is of class %d\n", i + 5, table.players[i + 5].classType);
+		printf("Player %d is a %s\n", i + 5, _classes[table.players[i + 5].classType].c_str());
 		
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 	
 	gameState = PLAYING;

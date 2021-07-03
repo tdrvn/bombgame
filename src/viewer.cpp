@@ -110,7 +110,7 @@ void drawArena (int gameState, GameTable *table)
 	//printf("%d\n", currentTick);
 	char buffer[100] = {'\0'};
 	glRasterPos2f(-2.0f, -1.93f);
-	sprintf(buffer, "Action speed is %d and respawn time is %d", tickSpeed, DEFAULT_RESPAWN_TIME);
+	sprintf(buffer, "Action speed is %d", tickSpeed);
 	writeText(buffer);
 	
 	
@@ -163,30 +163,43 @@ void drawArena (int gameState, GameTable *table)
 	{
 		float val = 1.0f;
 		if(table->players[i].invisibleTime)
-			val = 0.6f;
+			val = 0.3f;
 		if(table->players[i].respawnTime > 0)
 			continue;
-		if(table->players[i].team == RED_TEAM)
-			glColor4f(0.9f, 0.0f, 0.0f, val);
-		else
-			glColor4f(0.0f, 0.0f, 0.9f, val);
 		int ii=table->players[i].position.row;
 		int jj=table->players[i].position.col;
 		float x = 0 - 1.9f + (float)jj*0.038f;
 		float y = 0 + 1.9f - (float)ii*0.038f;
 		x+=0.019;
 		y-=0.019;
-		drawRegPoly(x, y, 0.042f, 10);
+		if(table->players[i].hasFlag)
+		{
+			glColor4f(0.9f, 0.9f, 0.0f, 0.25);
+			drawRegPoly(x, y, 0.2f, 10);
+		}
+		if(table->players[i].classType == BOMBER)
+		{
+			if(table->players[i].team == RED_TEAM)
+				glColor4f(0.9f, 0.0f, 0.0f, val);
+			else
+				glColor4f(0.0f, 0.0f, 0.9f, val);
+			drawRegPoly(x, y, 0.042f, 10);
+		}
 		if(table->players[i].classType == TANK)
 		{
-			glColor4f(0.0f, 0.8f, 0.0f, val);
-			drawRegPoly(x, y, 0.024f, 10);
+			if(table->players[i].team == RED_TEAM)
+				glColor4f(0.5f, 0.0f, 0.0f, val);
+			else
+				glColor4f(0.0f, 0.0f, 0.5f, val);
+			drawRegPoly(x, y, 0.052f, 10);
 		}
 		if(table->players[i].classType == NINJA)
 		{
-			//glColor4f(0.87f, 0.37f, 0.96f, val);
-			glColor4f(0.0f, 0.0f, 0.0f, val);
-			drawRegPoly(x, y, 0.024f, 10);
+			if(table->players[i].team == RED_TEAM)
+				glColor4f(0.9f, 0.4f, 0.4f, val);
+			else
+				glColor4f(0.4f, 0.4f, 0.9f, val);
+			drawRegPoly(x, y, 0.032f, 10);
 		}
 	}
 	glColor3f(0.9f, 0.0f, 0.0f);
